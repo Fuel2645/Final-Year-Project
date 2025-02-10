@@ -30,14 +30,19 @@ public class herbivorStuff : MonoBehaviour
     private Vector3 TargetLocation;
     private Vector3 m_MovementVector;
 
+
+    public List<GameObject> VisibleEntities;
+
     // Start is called before the first frame update
     void Start()
     {
         CharacterController = GetComponent<CharacterController>();
+        m_MovementVector = transform.position;
+        TargetLocation = transform.position;
         //FoodLocaiton = FoodReference.transform.position;
         m_Speed = 10.0f;
-        InvokeRepeating("StateCheck", 1.0f, 0.5f);
-        InvokeRepeating("Physics", 1.0f, 0.05f);
+        //InvokeRepeating("StateCheck", 1.0f, 0.5f);
+        //InvokeRepeating("Physics", 1.0f, 0.05f);
 
     }
 
@@ -82,5 +87,28 @@ public class herbivorStuff : MonoBehaviour
             transform.LookAt(FoodLocaiton);
             CharacterController.Move(m_MovementVector);
         }
+    }
+
+    public void AddEntity(GameObject entityToAdd)
+    {
+        VisibleEntities.Add(entityToAdd);
+        print("Enter");
+    }
+
+    public void RemoveEntity(GameObject entityToRemove)
+    {
+        VisibleEntities.Remove(entityToRemove);
+        print("Exit");
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("COllision " + collision.gameObject.name + " " + this.name);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        
     }
 }
