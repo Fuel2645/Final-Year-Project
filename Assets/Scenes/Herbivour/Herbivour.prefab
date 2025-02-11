@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3205934467166350385}
   - component: {fileID: -6560489892257675614}
   - component: {fileID: 4870914581599315849}
+  - component: {fileID: 779844451619111785}
   m_Layer: 7
   m_Name: Herbivour
   m_TagString: Untagged
@@ -101,7 +102,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -119,14 +120,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e704f70208f3fc43b2c665a68fd163f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Vision: {fileID: 0}
-  SphereCollider: {fileID: 0}
-  CharacterController: {fileID: 0}
+  CharacterController: {fileID: 779844451619111785}
   FoodLocaiton: {x: 0, y: 0, z: 0}
   moveDirection: {x: 0, y: 0, z: 0}
-  VisibleEntities: []
+  m_State: 0
+  FoodCount: 100
+  isMoving: 0
+  FoundFood: []
 --- !u!136 &4870914581599315849
 CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3125096015071511949}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Height: 7
+  m_Direction: 0
+  m_Center: {x: 3.5, y: 0, z: 0}
+--- !u!143 &779844451619111785
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -143,8 +168,11 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Height: 7
-  m_Direction: 0
-  m_Center: {x: 3.5, y: 0, z: 0}
+  serializedVersion: 3
+  m_Height: 1
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}

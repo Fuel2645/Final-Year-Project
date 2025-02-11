@@ -10,18 +10,18 @@ public class VisionScript : MonoBehaviour
     public List<GameObject> targets = new List<GameObject>();
 
 
-    void OnCollisionEnter(Collision collision)
-    {
-        ownerRef.GetComponent<herbivorStuff>().AddEntity(collision.gameObject);
-        targets.Add(collision.gameObject);
-        print("Enter");
-    }
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    ownerRef.GetComponent<herbivorStuff>().AddEntity(collision.gameObject);
+    //    targets.Add(collision.gameObject);
+    //    print("Enter");
+    //}
 
-    void OnCollisionExit(Collision collision)
-    {
-        ownerRef.GetComponent<herbivorStuff>().RemoveEntity(collision.gameObject);
-        targets.Remove(collision.gameObject);
-        print("Exit");
-    }
+    //void OnCollisionExit(Collision collision)
+    //{
+    //    ownerRef.GetComponent<herbivorStuff>().RemoveEntity(collision.gameObject);
+    //    targets.Remove(collision.gameObject);
+    //    print("Exit");
+    //}
 
 }
