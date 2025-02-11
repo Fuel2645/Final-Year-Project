@@ -28,7 +28,7 @@ public class herbivorStuff : MonoBehaviour
     private Vector3 TargetLocation;
     private Vector3 m_MovementVector;
     public bool isMoving = false;
-    bool isEating;
+    public bool isEating;
     bool isDrinking;
 
     float ReductionRate;
@@ -65,14 +65,14 @@ public class herbivorStuff : MonoBehaviour
         {
             m_State = AIStates.Eating;
         }
-
+       
 
         Statemachine();
     }
 
     void FoodDrain()
     {
-        ReductionRate = -0.5f;
+        ReductionRate = -2.5f;
         //ReductionRate -= m_MovementVector.magnitude;
         FoodCount += ReductionRate;
 
@@ -90,8 +90,8 @@ public class herbivorStuff : MonoBehaviour
                 int rnd = Random.Range(0, 2);
                 if(rnd == 0)
                 {
-                    TargetLocation.x += Random.Range(-50, 51);
-                    TargetLocation.z += Random.Range(-50, 51);
+                    TargetLocation.x += Random.Range(-10, 11);
+                    TargetLocation.z += Random.Range(-10, 11);
                 }
                 else
                 {
@@ -101,20 +101,20 @@ public class herbivorStuff : MonoBehaviour
             case AIStates.Fleeing:
                 break;
             case AIStates.Finding_Food:
-                if(FoundFood.Count == 0 && isMoving == false)
+                if(FoundFood.Count == 0)
                 {
-                    TargetLocation.x += Random.Range(-100, 101);
-                    TargetLocation.z += Random.Range(-100, 101);
-                    isMoving = true;
+                    TargetLocation.x += Random.Range(-10, 10);
+                    TargetLocation.z += Random.Range(-10, 10);
                 }
-                else if(FoodCount == 0 && isMoving == true)
+                if(isMoving == true)
                 {
                     if(TargetLocation == this.transform.position)
                     {
+                        isEating = true;
                         isMoving = false;
                     }
                 }
-                else if(isMoving == false)
+                if(isMoving == false)
                 {
                     // sorts Foods based on distance from the player in ascending order, closest == first 
                     FoundFood.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
@@ -128,9 +128,25 @@ public class herbivorStuff : MonoBehaviour
             case AIStates.Drinking:
                 break;
             case AIStates.Eating:
+                FoodCount += FoundFood.First().GetComponent<FoodData>().FoodValue;
+                GameObject gameObject = FoundFood.First();
+                FoundFood.Remove(FoundFood.First());
+                Destroy(gameObject);
+                isEating = false;
                 isMoving= false;
                 break;
                 
+        }
+    }
+
+    void SightClear()
+    {
+        for (int i = FoundFood.Count; i < 0; i--)
+        {
+            if (FoundFood[i] == null)
+            {
+                FoundFood.RemoveAt(i);
+            }
         }
     }
 
@@ -143,7 +159,7 @@ public class herbivorStuff : MonoBehaviour
     {
         moveDirection = TargetLocation - this.transform.position;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
-        if (moveDirection.magnitude < 0.1)
+        if (moveDirection.magnitude < 0.5)
         {
             this.transform.position = TargetLocation;
         }
@@ -159,10 +175,19 @@ public class herbivorStuff : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Food"))
+        if (other.gameObject.tag==("Food") && !FoundFood.Contains(other.gameObject))
         {
+            print("balls");
+            if (FoundFood.Count == 0)
+            {
+                TargetLocation = other.transform.position;
+            }
+
+
             FoundFood.Add(other.gameObject);
+
         }
+       // else print("dick");
 
     }
 
@@ -172,6 +197,6 @@ public class herbivorStuff : MonoBehaviour
         {
             FoundFood.Remove(other.gameObject);
         }
-        
+
     }
 }
