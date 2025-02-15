@@ -30,9 +30,8 @@ public class herbivorStuff : MonoBehaviour
     public bool isMoving = false;
     public bool isEating;
     bool isDrinking;
-
     float ReductionRate;
-
+    private GameObject chasingCarnivore;
     public List<GameObject> FoundFood;
 
     // Start is called before the first frame update
@@ -53,21 +52,28 @@ public class herbivorStuff : MonoBehaviour
 
     void StateCheck()
     {
-        if (FoodCount > 50)
+        FoundFood.RemoveAll(item => item == null);
+        if (m_State != AIStates.Fleeing)
+        {
+            if (FoodCount > 50)
+            {
+                m_State = AIStates.Idle;
+            }
+            else if (FoodCount <= 50 && isMoving == false)
+            {
+                m_State = AIStates.Finding_Food;
+            }
+            else if (this.transform.position == TargetLocation && isEating == true)
+            {
+                m_State = AIStates.Eating;
+            }
+            Statemachine();
+        }
+        if (chasingCarnivore != null && Vector3.Distance(chasingCarnivore.transform.position, this.transform.position) > 500)
         {
             m_State = AIStates.Idle;
         }
-        else if (FoodCount <= 50 && isMoving == false)
-        {
-            m_State = AIStates.Finding_Food;
-        }
-        else if (this.transform.position == TargetLocation && isEating == true)
-        {
-            m_State = AIStates.Eating;
-        }
-       
-
-        Statemachine();
+        
     }
 
     void FoodDrain()
@@ -117,9 +123,12 @@ public class herbivorStuff : MonoBehaviour
                 if(isMoving == false)
                 {
                     // sorts Foods based on distance from the player in ascending order, closest == first 
-                    FoundFood.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
-                    TargetLocation = FoundFood.First().transform.position;
-                    isMoving = true;
+                    if(FoundFood.Count > 0)
+                    {
+                        FoundFood.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
+                        TargetLocation = FoundFood.First().transform.position;
+                        isMoving = true;
+                    }
                 }
 
                 break;
@@ -171,32 +180,36 @@ public class herbivorStuff : MonoBehaviour
     }
 
     
-
-
-    private void OnTriggerEnter(Collider other)
+    public void addEntitiy(GameObject other)
     {
-        if (other.gameObject.tag==("Food") && !FoundFood.Contains(other.gameObject))
-        {
-            print("balls");
-            if (FoundFood.Count == 0)
+            if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
             {
-                TargetLocation = other.transform.position;
+                print("balls");
+                if (FoundFood.Count == 0)
+                {
+                    TargetLocation = other.transform.position;
+                }
+
+
+                FoundFood.Add(other.gameObject);
+
             }
-
-
-            FoundFood.Add(other.gameObject);
-
-        }
-       // else print("dick");
+            else if(other.gameObject.tag == ("Carnivore"))
+            {
+                print("Carnivore");
+                m_State = AIStates.Fleeing;
+                TargetLocation = (this.transform.position - other.transform.position).normalized * 10;
+                chasingCarnivore = other.gameObject;
+            }
+            else print("dick");
 
     }
 
-    private void OnTriggerExit(Collider other)
+    public void removeEntity(GameObject other)
     {
-        if (other.gameObject.CompareTag("Food"))
+        if (other.gameObject.tag == ("Food"))
         {
             FoundFood.Remove(other.gameObject);
         }
-
     }
 }
