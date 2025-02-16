@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class CarnivoreScript : MonoBehaviour
 {
+
+    AIStates m_State;
+    public CharacterController characterController;
+    public GameObject ChasingEntity;
+
+    private float FoodCount;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +21,16 @@ public class CarnivoreScript : MonoBehaviour
     {
         
     }
+
+
+    void StateMachine()
+    {
+
+    }
+
+    void StateCheck()
+    {
+
+    }
+
 }
