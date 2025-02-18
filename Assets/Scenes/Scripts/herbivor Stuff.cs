@@ -20,7 +20,7 @@ public enum AIStates
 
 public class herbivorStuff : MonoBehaviour
 { 
-    public CharacterController CharacterController;
+    public CharacterController characterController;
     public Vector3 FoodLocaiton, moveDirection;
     public AIStates m_State = AIStates.Idle;
     public float FoodCount = 100;
@@ -37,7 +37,7 @@ public class herbivorStuff : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CharacterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();
         m_MovementVector = this.transform.position;
         TargetLocation = this.transform.position;
         //FoodLocaiton = FoodReference.transform.position;
@@ -204,7 +204,7 @@ public class herbivorStuff : MonoBehaviour
         else
         {
             this.transform.LookAt(TargetLocation);
-            CharacterController.Move(m_MovementVector);
+            characterController.Move(m_MovementVector);
         }
     }
 
