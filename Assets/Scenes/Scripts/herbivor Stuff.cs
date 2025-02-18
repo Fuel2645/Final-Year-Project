@@ -42,9 +42,9 @@ public class herbivorStuff : MonoBehaviour
         TargetLocation = this.transform.position;
         //FoodLocaiton = FoodReference.transform.position;
         m_Speed = 10.0f;
-        InvokeRepeating("StateCheck", 1.0f, 0.5f);
-        InvokeRepeating("Physics", 1.0f, 0.05f);
-        InvokeRepeating("FoodDrain", 0, 0.5f);
+       InvokeRepeating("StateCheck", 1.0f, 0.5f);
+       InvokeRepeating("Physics", 1.0f, 0.05f);
+       InvokeRepeating("FoodDrain", 0, 0.5f);
 
     }
 
@@ -89,7 +89,7 @@ public class herbivorStuff : MonoBehaviour
             }
             else if (chasingCarnivore != null && this.transform.position == TargetLocation)
             {
-                TargetLocation += (this.transform.position - chasingCarnivore.transform.position).normalized * 10;
+                //TargetLocation += (this.transform.position - chasingCarnivore.transform.position).normalized * 10;
                 print("LocationInfo");
             }
         }
@@ -116,43 +116,44 @@ public class herbivorStuff : MonoBehaviour
         {
             case AIStates.Idle:
                 int rnd = Random.Range(0, 2);
-                if(rnd == 0)
+                if (rnd == 0)
                 {
                     TargetLocation.x += Random.Range(-10, 11);
                     TargetLocation.z += Random.Range(-10, 11);
+                    TargetLocation.y = 0;
                 }
                 else
                 {
-                    TargetLocation = transform.position;
+                    TargetLocation = this.transform.position;
                 }
                 break;
             case AIStates.Fleeing:
                 break;
             case AIStates.Finding_Food:
-                if(FoundFood.Count == 0)
+                if (FoundFood.Count == 0)
                 {
                     TargetLocation.x += Random.Range(-10, 10);
                     TargetLocation.z += Random.Range(-10, 10);
                 }
-                if(isMoving == true)
+                if (isMoving == true)
                 {
-                    if(TargetLocation == this.transform.position)
+                    if (TargetLocation == this.transform.position)
                     {
                         isEating = true;
                         isMoving = false;
                     }
                 }
-                if(isMoving == false)
+                if (isMoving == false)
                 {
                     // sorts Foods based on distance from the player in ascending order, closest == first 
-                    if(FoundFood.Count > 1)
+                    if (FoundFood.Count > 1)
                     {
                         print("Sorting");
                         FoundFood.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
                         TargetLocation = FoundFood.FirstOrDefault().transform.position;
                         isMoving = true;
                     }
-                    else if(FoundFood.Count > 0)
+                    else if (FoundFood.Count > 0)
                     {
                         TargetLocation = FoundFood.FirstOrDefault().transform.position;
                         isMoving = true;
@@ -196,15 +197,19 @@ public class herbivorStuff : MonoBehaviour
     void Physics()
     {
         moveDirection = TargetLocation - this.transform.position;
+        moveDirection.y = 0;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
+        m_MovementVector.y = 0;
         if (moveDirection.magnitude < 0.5)
         {
-            this.transform.position = TargetLocation;
+            //this.transform.position = TargetLocation;
         }
         else
         {
+
             this.transform.LookAt(TargetLocation);
             characterController.Move(m_MovementVector);
+           
         }
     }
 

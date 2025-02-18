@@ -11,6 +11,7 @@ public class VisionScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print("I Discovered SOmmat");
         ownerRef.GetComponent<herbivorStuff>().addEntitiy(other.gameObject);
     }
 

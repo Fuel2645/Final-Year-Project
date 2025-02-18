@@ -22,32 +22,30 @@ public class CameraScript : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
            
-            m_Position.y += CameraSpeed / 50;
+            m_Position.z += CameraSpeed / 50;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            m_Position.y -= CameraSpeed / 50;  
+            m_Position.z -= CameraSpeed / 50;  
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.A))
         {
             m_Position.x -= CameraSpeed / 50;
         }
-        if(Input.GetKey(KeyCode.A))
+        if(Input.GetKey(KeyCode.D))
         {
             m_Position.x += CameraSpeed / 50;
         }
-        if(Input.mouseScrollDelta.y <0 )
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
-            m_Position.z -= CameraSpeed / 10;
+            m_Position.y -= ScrollSpeed / 10;
         }
-        else if(Input.mouseScrollDelta.y > 0 )
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
         {
-            m_Position.z += CameraSpeed / 10;
+            m_Position.y += ScrollSpeed / 10;
         }
-        if(Input.GetAxis("Mouse Y") != 0 && Input.GetAxis("Mouse X") != 0)
-        {
-            
-        }
+        
+
 
         this.transform.position = m_Position;
     }

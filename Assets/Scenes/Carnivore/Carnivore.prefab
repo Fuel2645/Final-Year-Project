@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2680667516681991669}
   - component: {fileID: 2746380762747388593}
   - component: {fileID: 2899455242196668445}
-  - component: {fileID: 6388436428760991539}
   - component: {fileID: 1747681446214086772}
   - component: {fileID: 407525338624911097}
+  - component: {fileID: 272146819481900958}
   m_Layer: 0
   m_Name: Carnivore
   m_TagString: Carnivore
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: db93e8489bcdc9845a73b3d984907637, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -87,29 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6388436428760991539
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3621615830299103185}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!143 &1747681446214086772
 CharacterController:
   m_ObjectHideFlags: 0
@@ -163,6 +140,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &272146819481900958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621615830299103185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ed4bfb8df73f3441bf895292f7244ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_State: 0
+  characterController: {fileID: 1747681446214086772}
+  ChasingEntity: {fileID: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  TargetLocation: {x: 0, y: 0, z: 0}
+  m_MovementVector: {x: 0, y: 0, z: 0}
+  DesireToHunt: 0
 --- !u!1 &5368023152244383834
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7485405186000533563}
   - component: {fileID: 6297211341293132944}
-  - component: {fileID: 4434465824353444404}
+  - component: {fileID: 4339557940417617248}
   m_Layer: 0
   m_Name: Sight
   m_TagString: Untagged
@@ -218,7 +214,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3613567641014311022, guid: 3a7b9852f2cd2b2489a4d321c9faf6a8, type: 3}
---- !u!114 &4434465824353444404
+--- !u!114 &4339557940417617248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,7 +223,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5368023152244383834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c21ce5487987d34391fe3fc1ef63b85, type: 3}
+  m_Script: {fileID: 11500000, guid: 556cf40165ff4474cb9be7159403b587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownerRef: {fileID: 0}
+  ownerRef: {fileID: 3621615830299103185}
