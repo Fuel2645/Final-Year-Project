@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class CarnivoreScript : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CarnivoreScript : MonoBehaviour
     public GameObject ChasingEntity;
     public Vector3 moveDirection, TargetLocation, m_MovementVector;
     private float m_Speed;
-    private float HuntChance;
+    public float HuntChance;
 
     private float FoodCount = 100;
     public float DesireToHunt;
@@ -54,7 +55,7 @@ public class CarnivoreScript : MonoBehaviour
     }
     void StateCheck()
     {
-        HuntChance = 100 - FoodCount - DesireToHunt;  
+        HuntChance = 0 + FoodCount - DesireToHunt;  
 
         if (HuntChance > 50)
         {
@@ -72,20 +73,7 @@ public class CarnivoreScript : MonoBehaviour
 
     public void SpottedEntity(GameObject Entity)
     {
-        if (Entity.tag == ("Herbivore"))
-        {
-            if (ChasingEntity == null)
-            {
-                ChasingEntity = Entity;
-            }
-            else
-            {
-                if (Vector3.Distance(this.transform.position, Entity.transform.position) < Vector3.Distance(this.transform.position, ChasingEntity.transform.position))
-                {
-                    ChasingEntity = Entity;
-                }
-            }
-        }
+       
     }
 
     public void ForgetEntity(GameObject Entity)
@@ -124,6 +112,34 @@ public class CarnivoreScript : MonoBehaviour
                 break;
             case AIStates.Drinking:
                 break;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject != this)
+        {
+            if (other.gameObject.tag == ("Herbivore"))
+            {
+                if (ChasingEntity == null)
+                {
+                    ChasingEntity = other.gameObject;
+                }
+                else
+                {
+                    if (Vector3.Distance(this.transform.position, other.gameObject.transform.position) < Vector3.Distance(this.transform.position, ChasingEntity.transform.position))
+                    {
+                        ChasingEntity = other.gameObject;
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == ChasingEntity)
+        {
+            ChasingEntity = null;
         }
     }
 }

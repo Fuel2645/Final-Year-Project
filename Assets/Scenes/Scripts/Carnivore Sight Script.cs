@@ -8,6 +8,7 @@ public class CarnivoreSightScript : MonoBehaviour
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
+        print("I See you");
         ownerRef.GetComponent<CarnivoreScript>().SpottedEntity(other.gameObject);
     }
 

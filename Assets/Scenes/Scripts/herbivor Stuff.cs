@@ -89,7 +89,7 @@ public class herbivorStuff : MonoBehaviour
             }
             else if (chasingCarnivore != null && this.transform.position == TargetLocation)
             {
-                //TargetLocation += (this.transform.position - chasingCarnivore.transform.position).normalized * 10;
+                TargetLocation += (this.transform.position - chasingCarnivore.transform.position).normalized * 10;
                 print("LocationInfo");
             }
         }
@@ -202,44 +202,45 @@ public class herbivorStuff : MonoBehaviour
         m_MovementVector.y = 0;
         if (moveDirection.magnitude < 0.5)
         {
-            //this.transform.position = TargetLocation;
+            this.transform.position = TargetLocation;
         }
         else
         {
 
             this.transform.LookAt(TargetLocation);
+            //this.transform.position = this.transform.position + m_MovementVector;
             characterController.Move(m_MovementVector);
            
         }
     }
 
     
-    public void addEntitiy(GameObject other)
+
+    private void OnTriggerEnter(Collider other)
     {
-            if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
+        if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
+        {
+            print("balls");
+            if (FoundFood.Count == 0 && m_State != AIStates.Fleeing)
             {
-                print("balls");
-                if (FoundFood.Count == 0)
-                {
-                    TargetLocation = other.transform.position;
-                }
-
-
-                FoundFood.Add(other.gameObject);
-
+                TargetLocation = other.transform.position;
             }
-            else if(other.gameObject.tag == ("Carnivore"))
-            {
-                print("Carnivore");
-                m_State = AIStates.Fleeing;
-                TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
-                chasingCarnivore = other.gameObject;
-            }
-            else print("dick");
 
+
+            FoundFood.Add(other.gameObject);
+
+        }
+        else if (other.gameObject.tag == ("Carnivore"))
+        {
+            print("Carnivore");
+            m_State = AIStates.Fleeing;
+            TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
+            chasingCarnivore = other.gameObject;
+        }
+        else print("dick");
     }
 
-    public void removeEntity(GameObject other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == ("Food") && FoundFood.Contains(other.gameObject))
         {
