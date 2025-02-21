@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 407525338624911097}
   - component: {fileID: 272146819481900958}
   - component: {fileID: 4074002000722693285}
+  - component: {fileID: 7220919371350344020}
   m_Layer: 0
   m_Name: Carnivore
   m_TagString: Carnivore
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3621615830299103185}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.011, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -177,7 +178,30 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 6, y: 2, z: 8}
   m_Center: {x: 0, y: 0, z: 4.5}
+--- !u!136 &7220919371350344020
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621615830299103185}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.50375974
+  m_Height: 2.4392924
+  m_Direction: 1
+  m_Center: {x: 0.0037597418, y: -0.109227896, z: -0.00000011920929}

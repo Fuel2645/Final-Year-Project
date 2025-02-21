@@ -13,10 +13,9 @@ public class CarnivoreScript : MonoBehaviour
     public Vector3 moveDirection, TargetLocation, m_MovementVector;
     private float m_Speed;
     public float HuntChance;
-
     private float FoodCount = 100;
     public float DesireToHunt;
-
+    public float ReductionRate = 2.5f;
 
 
     // Start is called before the first frame update
@@ -29,6 +28,7 @@ public class CarnivoreScript : MonoBehaviour
 
         InvokeRepeating("StateCheck", 1.0f, 0.5f);
         InvokeRepeating("Phyiscs", 0.0f, 0.05f);
+        InvokeRepeating("FoodDrain", 1.0f, 0.5f);
     }
 
     // Update is called once per frame
@@ -56,33 +56,27 @@ public class CarnivoreScript : MonoBehaviour
     void StateCheck()
     {
         HuntChance = 0 + FoodCount - DesireToHunt;  
+        int rnd = UnityEngine.Random.Range(50, 71);
 
-        if (HuntChance > 50)
+        if(m_State == AIStates.Idle)
         {
-            m_State = AIStates.Idle;
+            if (HuntChance > rnd)
+            {
+                m_State = AIStates.Idle;
+            }
+            else if (HuntChance <= rnd)
+            {
+                m_State = AIStates.Finding_Food;
+            }
         }
-        else if (HuntChance  < 50)
-        {
-            m_State = AIStates.Finding_Food;
-        }
+        
+       
 
 
 
         StateMachine();
     }
 
-    public void SpottedEntity(GameObject Entity)
-    {
-       
-    }
-
-    public void ForgetEntity(GameObject Entity)
-    {
-        if(ChasingEntity == Entity)
-        {
-            ChasingEntity = null;
-        }
-    }
 
 
     void StateMachine()
@@ -107,8 +101,15 @@ public class CarnivoreScript : MonoBehaviour
             case AIStates.Finding_Water:
                 break;
             case AIStates.Finding_Food:
+                if(ChasingEntity == null)
+                {
+                    TargetLocation.x += Random.Range(-10, 11);
+                    TargetLocation.z += Random.Range(-10, 11);
+                }
                 break;
             case AIStates.Eating:
+                FoodCount += 25;
+                ChasingEntity.GetComponent<herbivorStuff>().GetEatenBitch();
                 break;
             case AIStates.Drinking:
                 break;
@@ -135,11 +136,24 @@ public class CarnivoreScript : MonoBehaviour
         }
     }
 
+    void FoodDrain()
+    {
+        FoodCount += ReductionRate;
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == ChasingEntity)
         {
             ChasingEntity = null;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject == ChasingEntity)
+        {
+            m_State = AIStates.Eating;
         }
     }
 }

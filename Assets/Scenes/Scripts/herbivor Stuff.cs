@@ -25,6 +25,7 @@ public class herbivorStuff : MonoBehaviour
     public AIStates m_State = AIStates.Idle;
     public float FoodCount = 100;
     private float m_Speed;
+    public int Health = 100;
     private Vector3 TargetLocation;
     private Vector3 m_MovementVector;
     public bool isMoving = false;
@@ -33,6 +34,9 @@ public class herbivorStuff : MonoBehaviour
     float ReductionRate;
     private GameObject chasingCarnivore;
     public List<GameObject> FoundFood;
+    public SphereCollider sphereCollider;
+    public GameObject CorpseRef;
+
 
     // Start is called before the first frame update
     void Start()
@@ -97,9 +101,14 @@ public class herbivorStuff : MonoBehaviour
 
     void FoodDrain()
     {
-        ReductionRate = -2.5f;
+        ReductionRate = -5f;
         //ReductionRate -= m_MovementVector.magnitude;
-        FoodCount += ReductionRate;
+        FoodCount = Mathf.Clamp(FoodCount + ReductionRate, 0, 100);
+        if(FoodCount == 0)
+        {
+            Health -= 5;
+            DeathCheck();
+        }
 
     }
 
@@ -135,7 +144,7 @@ public class herbivorStuff : MonoBehaviour
                     TargetLocation.x += Random.Range(-10, 10);
                     TargetLocation.z += Random.Range(-10, 10);
                 }
-                if (isMoving == true)
+                else if (isMoving == true)
                 {
                     if (TargetLocation == this.transform.position)
                     {
@@ -143,7 +152,7 @@ public class herbivorStuff : MonoBehaviour
                         isMoving = false;
                     }
                 }
-                if (isMoving == false)
+                else if (isMoving == false)
                 {
                     // sorts Foods based on distance from the player in ascending order, closest == first 
                     if (FoundFood.Count > 1)
@@ -159,7 +168,6 @@ public class herbivorStuff : MonoBehaviour
                         isMoving = true;
                     }
                 }
-
                 break;
             case AIStates.Finding_Water:
                 break;
@@ -189,8 +197,19 @@ public class herbivorStuff : MonoBehaviour
         }
     }
 
-    public void Eat()
+    public void GetEatenBitch()
     {
+        Health -= 25;
+        DeathCheck();
+    }
+
+    void DeathCheck()
+    {
+        if (Health <= 0)
+        {
+            Instantiate(CorpseRef,this.transform);
+            Destroy(this);
+        }
 
     }
 
@@ -214,7 +233,16 @@ public class herbivorStuff : MonoBehaviour
         }
     }
 
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider == sphereCollider)
+        {
+            print("Testing");
+            // Carnviore attack idk
+        }
+
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -230,14 +258,14 @@ public class herbivorStuff : MonoBehaviour
             FoundFood.Add(other.gameObject);
 
         }
-        else if (other.gameObject.tag == ("Carnivore"))
-        {
-            print("Carnivore");
-            m_State = AIStates.Fleeing;
-            TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
-            chasingCarnivore = other.gameObject;
-        }
-        else print("dick");
+        //else if (other.gameObject.tag == ("Carnivore"))
+        //{
+        //    print("Carnivore");
+        //    m_State = AIStates.Fleeing;
+        //    TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
+        //    chasingCarnivore = other.gameObject;
+        //}
+        //else print("dick");
     }
 
     private void OnTriggerExit(Collider other)
