@@ -36,6 +36,7 @@ public class herbivorStuff : MonoBehaviour
     public List<GameObject> FoundFood;
     public SphereCollider sphereCollider;
     public GameObject CorpseRef;
+    float BoundX1 = 30,BoundX2 = -30, BoundZ1 = 30,BoundZ2= -30;
 
 
     // Start is called before the first frame update
@@ -50,6 +51,8 @@ public class herbivorStuff : MonoBehaviour
        InvokeRepeating("Physics", 1.0f, 0.05f);
        InvokeRepeating("FoodDrain", 0, 0.5f);
 
+       UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
+     
     }
 
     // Update is called once per frame
@@ -87,7 +90,7 @@ public class herbivorStuff : MonoBehaviour
         }
         else
         {
-            if (chasingCarnivore != null && Vector3.Distance(chasingCarnivore.transform.position, this.transform.position) > 50)
+            if (chasingCarnivore != null && Vector3.Distance(chasingCarnivore.transform.position, this.transform.position) >= 10)
             {
                 m_State = AIStates.Idle;
             }
@@ -215,10 +218,27 @@ public class herbivorStuff : MonoBehaviour
 
     void Physics()
     {
+        if(TargetLocation.x >= BoundX1 )
+        {
+            TargetLocation.x = BoundX1;
+        }
+        else if(TargetLocation.x <= BoundX2)
+        {
+            TargetLocation.x = BoundX2;
+        }
+
+        if(TargetLocation.z >= BoundZ1 )
+        {
+            TargetLocation.z = BoundZ1;
+        }
+        else if( TargetLocation.z <= BoundZ2)
+        {
+            TargetLocation.z = BoundZ2;
+        }
+
+
         moveDirection = TargetLocation - this.transform.position;
-        moveDirection.y = 0;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
-        m_MovementVector.y = 0;
         if (moveDirection.magnitude < 0.5)
         {
             this.transform.position = TargetLocation;
@@ -258,14 +278,14 @@ public class herbivorStuff : MonoBehaviour
             FoundFood.Add(other.gameObject);
 
         }
-        //else if (other.gameObject.tag == ("Carnivore"))
-        //{
-        //    print("Carnivore");
-        //    m_State = AIStates.Fleeing;
-        //    TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
-        //    chasingCarnivore = other.gameObject;
-        //}
-        //else print("dick");
+        else if (other.gameObject.tag == ("Carnivore") && other is not BoxCollider)
+        {
+            print("Carnivore");
+            m_State = AIStates.Fleeing;
+            TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
+            chasingCarnivore = other.gameObject;
+        }
+        else print("dick");
     }
 
     private void OnTriggerExit(Collider other)
