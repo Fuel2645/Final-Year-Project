@@ -99,6 +99,10 @@ public class herbivorStuff : MonoBehaviour
                 TargetLocation += (this.transform.position - chasingCarnivore.transform.position).normalized * 10;
                 print("LocationInfo");
             }
+            else if (chasingCarnivore == null)
+            {
+                m_State = AIStates.Idle;
+            }
         }
     }
 
@@ -138,14 +142,19 @@ public class herbivorStuff : MonoBehaviour
                 {
                     TargetLocation = this.transform.position;
                 }
+
+                if(FoodCount >= 70)
+                {
+                    Health += 5;
+                }
                 break;
             case AIStates.Fleeing:
                 break;
             case AIStates.Finding_Food:
                 if (FoundFood.Count == 0)
                 {
-                    TargetLocation.x += Random.Range(-10, 10);
-                    TargetLocation.z += Random.Range(-10, 10);
+                    TargetLocation.x += Random.Range(-20, 10);
+                    TargetLocation.z += Random.Range(-20, 10);
                 }
                 else if (isMoving == true)
                 {
@@ -202,6 +211,8 @@ public class herbivorStuff : MonoBehaviour
 
     public void GetEatenBitch()
     {
+        m_State = AIStates.Fleeing;
+        print("I got bit");
         Health -= 25;
         DeathCheck();
     }
@@ -210,8 +221,10 @@ public class herbivorStuff : MonoBehaviour
     {
         if (Health <= 0)
         {
-            Instantiate(CorpseRef,this.transform);
-            Destroy(this);
+            Instantiate(CorpseRef,this.transform.position, this.transform.rotation);
+            this.tag = CorpseRef.tag;
+            Destroy(this.gameObject);
+            
         }
 
     }

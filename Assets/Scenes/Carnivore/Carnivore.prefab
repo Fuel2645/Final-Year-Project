@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2899455242196668445}
   - component: {fileID: 1747681446214086772}
   - component: {fileID: 407525338624911097}
-  - component: {fileID: 272146819481900958}
   - component: {fileID: 4074002000722693285}
+  - component: {fileID: 272146819481900958}
   - component: {fileID: 7220919371350344020}
   m_Layer: 0
   m_Name: Carnivore
@@ -141,6 +141,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &4074002000722693285
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621615830299103185}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6, y: 2, z: 8}
+  m_Center: {x: 0, y: 0, z: 4.5}
 --- !u!114 &272146819481900958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,27 +182,7 @@ MonoBehaviour:
   m_MovementVector: {x: 0, y: 0, z: 0}
   HuntChance: 0
   DesireToHunt: 0
---- !u!65 &4074002000722693285
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3621615830299103185}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 6, y: 2, z: 8}
-  m_Center: {x: 0, y: 0, z: 4.5}
+  ReductionRate: 2.5
 --- !u!136 &7220919371350344020
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -201,7 +202,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.50375974
-  m_Height: 2.4392924
+  m_Radius: 0.6
+  m_Height: 3
   m_Direction: 1
   m_Center: {x: 0.0037597418, y: -0.109227896, z: -0.00000011920929}
