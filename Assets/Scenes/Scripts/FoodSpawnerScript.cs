@@ -5,17 +5,29 @@ using UnityEngine;
 
 public class FoodScript : MonoBehaviour
 {
-    public GameObject foodRef;
+    private GameObject foodRef;
     List<GameObject> spawnedFood = new List<GameObject>();
-    public float radius;
-    public int FoodLimit;
-    public int Min, Max;
+    private float BoundX, BoundZ;
+    private int FoodLimit;
+    private float Min, Max;
 
-    private void Start()
+
+    public void initialise(float gBoundX, float gBoundZ, int MaxFood, float MinDelay, float MaxDelay, GameObject FoodRef)
     {
-        SpawnFood();
-        
+        print("Food Spawner Start");
+
+
+        BoundX = gBoundX;
+        BoundZ = gBoundZ;
+        FoodLimit = MaxFood;
+        Min = MinDelay;
+        Max = MaxDelay;
+        foodRef = FoodRef;
+
+        RandomFoodTimer();
     }
+
+
 
     void RandomFoodTimer()
     {
@@ -24,8 +36,8 @@ public class FoodScript : MonoBehaviour
 
     void SpawnFood()
     {
-        float rndX = Random.Range(radius * -1, radius + 1);
-        float rndZ = Random.Range(radius * -1, radius + 1);
+        float rndX = Random.Range(BoundX * -1, BoundX + 1);
+        float rndZ = Random.Range(BoundZ * -1, BoundZ + 1);
 
 
         if (spawnedFood.Count < FoodLimit)

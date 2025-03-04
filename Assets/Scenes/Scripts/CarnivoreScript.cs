@@ -8,34 +8,28 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class CarnivoreScript : MonoBehaviour
 {
 
-    public AIStates m_State;
-    public CharacterController characterController;
-    public GameObject ChasingEntity;
-    public Vector3 moveDirection, TargetLocation, m_MovementVector;
+    private AIStates m_State;
+    private CharacterController characterController;
+    private GameObject ChasingEntity;
+    private Vector3 moveDirection, TargetLocation, m_MovementVector;
     private float m_Speed;
-    public float HuntChance;
-    private float FoodCount = 100;
-    public float DesireToHunt;
-    public float ReductionRate = 2.5f;
-    int NeedToHunt;
-    float BoundX1 = 30, BoundX2 = -30, BoundZ1 = 30, BoundZ2 = -30;
-    public float Distancce;
-    bool isMoving = false;
-    public GameObject CorspeRef;
-    int Health = 100;
+    private float HuntChance;
+    public float FoodCount = 100;
+    private float DesireToHunt;
+    private float ReductionRate = 2.5f;
+    private int NeedToHunt;
+    private float BoundX1, BoundX2, BoundZ1, BoundZ2;
+    private float Distancce;
+    private bool isMoving = false;
+    private GameObject CorspeRef;
+    public int m_Health;
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         m_MovementVector = this.transform.position;
         TargetLocation = this.transform.position;
-        m_Speed = 10.0f;
-        m_State = AIStates.Idle;
-        NeedToHunt = UnityEngine.Random.Range(50, 71);
         
-        InvokeRepeating("StateCheck", 1.0f, 0.5f);
-        InvokeRepeating("Phyiscs", 0.0f, 0.05f);
-        InvokeRepeating("FoodDrain", 1.0f, 0.5f);
     }
 
 
@@ -44,6 +38,28 @@ public class CarnivoreScript : MonoBehaviour
     void Update()
     {
     }
+
+    public void initialise(float BoundX, float BoundZ, int Health, float Speed, GameObject Corpse)
+    {
+        CorspeRef = Corpse;
+
+        print("Carnivore Start");
+
+        m_Speed = Speed;
+        m_State = AIStates.Idle;
+        m_Health = Health;
+        NeedToHunt = UnityEngine.Random.Range(50, 71);
+
+        BoundX1 = BoundX;
+        BoundX2 = -1 * BoundX;
+        BoundZ1 = BoundZ;
+        BoundZ2 = -1 * BoundZ;
+
+        InvokeRepeating("StateCheck", 1.0f, 0.5f);
+        InvokeRepeating("Phyiscs", 0.0f, 0.05f);
+        InvokeRepeating("FoodDrain", 1.0f, 0.5f);
+    }
+
 
     void Phyiscs()
     {
@@ -155,7 +171,11 @@ public class CarnivoreScript : MonoBehaviour
                 
                 break;
             case AIStates.Eating:
-                if (ChasingEntity.tag == "Corpse")
+                if(ChasingEntity == null)
+                {
+                    break;
+                }
+                else if (ChasingEntity.tag == "Corpse")
                 {
                     ChasingEntity.GetComponent<CorspseScript>().EatMe();
                 }
@@ -192,8 +212,12 @@ public class CarnivoreScript : MonoBehaviour
 
     void FoodDrain()
     {
-        FoodCount += ReductionRate;
-        DeathCheck();
+        FoodCount = Mathf.Clamp(FoodCount - ReductionRate, 0, 100);
+        if (FoodCount == 0)
+        {
+            m_Health -= 5;
+            DeathCheck();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -206,7 +230,7 @@ public class CarnivoreScript : MonoBehaviour
    
     void DeathCheck()
     {
-        if(Health <= 0)
+        if(m_Health <= 0)
         {
             Instantiate(CorspeRef, this.transform.position, this.transform.rotation);
             Destroy(this.gameObject);

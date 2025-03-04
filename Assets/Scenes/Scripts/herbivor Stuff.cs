@@ -20,23 +20,23 @@ public enum AIStates
 
 public class herbivorStuff : MonoBehaviour
 { 
-    public CharacterController characterController;
-    public Vector3 FoodLocaiton, moveDirection;
-    public AIStates m_State = AIStates.Idle;
-    public float FoodCount = 100;
+    private CharacterController characterController;
+    private Vector3 FoodLocaiton, moveDirection;
+    public AIStates m_State;
+    private float FoodCount = 100;
     private float m_Speed;
-    public int Health = 100;
+    private int m_Health;
     private Vector3 TargetLocation;
     private Vector3 m_MovementVector;
-    public bool isMoving = false;
-    public bool isEating;
-    bool isDrinking;
-    float ReductionRate;
+    private bool isMoving = false;
+    private bool isEating;
+    private bool isDrinking;
+    private float ReductionRate;
     private GameObject chasingCarnivore;
-    public List<GameObject> FoundFood;
-    public SphereCollider sphereCollider;
-    public GameObject CorpseRef;
-    float BoundX1 = 30,BoundX2 = -30, BoundZ1 = 30,BoundZ2= -30;
+    private List<GameObject> FoundFood;
+    private SphereCollider sphereCollider;
+    private GameObject CorpseRef;
+    private float BoundX1, BoundX2, BoundZ1, BoundZ2;
 
 
     // Start is called before the first frame update
@@ -46,16 +46,34 @@ public class herbivorStuff : MonoBehaviour
         m_MovementVector = this.transform.position;
         TargetLocation = this.transform.position;
         //FoodLocaiton = FoodReference.transform.position;
-        m_Speed = 10.0f;
-       InvokeRepeating("StateCheck", 1.0f, 0.5f);
-       InvokeRepeating("Physics", 1.0f, 0.05f);
-       InvokeRepeating("FoodDrain", 0, 0.5f);
-
+        
+        FoundFood = new List<GameObject>(); 
        UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
      
     }
 
     // Update is called once per frame
+    public void initialise(float BoundX, float BoundZ, int Health, float Speed, GameObject Corpse)
+    {
+        ReductionRate = -2.5f;
+        CorpseRef = Corpse;
+
+        print("Herbivore Start");
+
+        BoundX1 = BoundX;
+        BoundX2 = -1 * BoundX;
+        BoundZ1 = BoundZ;
+        BoundZ2 = -1 * BoundZ;
+
+        m_Health = Health;
+
+        m_Speed = Speed;
+
+        m_State = AIStates.Idle;
+        InvokeRepeating("StateCheck", 1.0f, 0.5f);
+        InvokeRepeating("Physics", 1.0f, 0.05f);
+        InvokeRepeating("FoodDrain", 0, 0.5f);
+    }
 
     void StateCheck()
     {
@@ -108,12 +126,11 @@ public class herbivorStuff : MonoBehaviour
 
     void FoodDrain()
     {
-        ReductionRate = -5f;
-        //ReductionRate -= m_MovementVector.magnitude;
+        
         FoodCount = Mathf.Clamp(FoodCount + ReductionRate, 0, 100);
         if(FoodCount == 0)
         {
-            Health -= 5;
+            m_Health -= 5;
             DeathCheck();
         }
 
@@ -145,7 +162,7 @@ public class herbivorStuff : MonoBehaviour
 
                 if(FoodCount >= 70)
                 {
-                    Health += 5;
+                    m_Health += 5;
                 }
                 break;
             case AIStates.Fleeing:
@@ -213,13 +230,13 @@ public class herbivorStuff : MonoBehaviour
     {
         m_State = AIStates.Fleeing;
         print("I got bit");
-        Health -= 25;
+        m_Health -= 25;
         DeathCheck();
     }
 
     void DeathCheck()
     {
-        if (Health <= 0)
+        if (m_Health <= 0)
         {
             Instantiate(CorpseRef,this.transform.position, this.transform.rotation);
             this.tag = CorpseRef.tag;
