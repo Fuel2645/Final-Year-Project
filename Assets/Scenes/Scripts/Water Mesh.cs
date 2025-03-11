@@ -5,14 +5,14 @@ using UnityEngine;
 public class WaterMesh : MonoBehaviour
 {
     Vector3[] newVerticies = new Vector3[]
-    {   new Vector3(1.0f,0.0f,0.0f),
+    {   new Vector3(0.0f,0.0f,-1.0f),
+        new Vector3(-1.0f,0.0f,-0.5f),
+        new Vector3(0.0f,0.0f,-0.5f),
+        new Vector3(1.0f,0.0f,-0.5f),
+        new Vector3(-1.0f,0.0f,0.5f),
         new Vector3(0.0f,0.0f,0.5f),
         new Vector3(1.0f,0.0f,0.5f),
-        new Vector3(2.0f,0.0f,0.5f),
-        new Vector3(0.0f,0.0f,1.5f),
-        new Vector3(1.0f,0.0f,1.5f),
-        new Vector3(2.0f,0.0f,1.5f),
-        new Vector3(1.0f,0.0f,2.0f)
+        new Vector3(0.0f,0.0f,1.0f)
     };
 
 
@@ -46,13 +46,21 @@ public class WaterMesh : MonoBehaviour
         Mesh mesh = new Mesh()
         { name = "River"};
         GetComponent<MeshFilter>().mesh = mesh;
-        GetComponent<MeshCollider>().sharedMesh = mesh;
+
 
         mesh.vertices = newVerticies;
         mesh.triangles = newTriagnles;
 
+        GetComponent<MeshCollider>().sharedMesh = mesh;
+        GetComponent<MeshCollider>().convex = true;
+        GetComponent<MeshCollider>().isTrigger = true;
 
+
+        Invoke("Moving", 0.2f);
     }
 
-
+    private void Moving()
+    {
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1, this.transform.position.z);
+    }
 }

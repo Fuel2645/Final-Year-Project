@@ -8,7 +8,7 @@ public class Fps : MonoBehaviour
 
     private IEnumerator Start()
     {
-        GUI.depth = 2;
+        GUI.depth = 2; 
         while (true)
         {
             count = 1f / Time.unscaledDeltaTime;

@@ -100,17 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e704f70208f3fc43b2c665a68fd163f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 779844451619111785}
-  FoodLocaiton: {x: 0, y: 0, z: 0}
-  moveDirection: {x: 0, y: 0, z: 0}
   m_State: 0
-  FoodCount: 100
-  Health: 100
-  isMoving: 0
-  isEating: 0
-  FoundFood: []
-  sphereCollider: {fileID: 0}
-  CorpseRef: {fileID: 3016863424008661572, guid: bdfad7427ffb22f479d303f84bf6c7ea, type: 3}
+  WaterCount: 100
+  FoundWater: []
 --- !u!143 &779844451619111785
 CharacterController:
   m_ObjectHideFlags: 0
@@ -156,8 +148,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6, y: 2, z: 9}
-  m_Center: {x: -0.022217035, y: 0, z: 4.8705263}
+  m_Size: {x: 9.872957, y: 2, z: 9}
+  m_Center: {x: -0.056322098, y: 0, z: 4.8705263}
 --- !u!135 &7934965410573556836
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -173,7 +165,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
