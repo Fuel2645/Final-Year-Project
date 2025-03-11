@@ -9,6 +9,7 @@ TagManager:
   - Herbivore
   - Corpse
   - FoodSpawner
+  - Water
   layers:
   - Default
   - TransparentFX

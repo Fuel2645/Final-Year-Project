@@ -6,6 +6,14 @@ public class FoodData : MonoBehaviour
 {
     public float FoodValue = 40;
 
+    public float EatFood()
+    {
+        Destroy(this.gameObject);
+        return FoodValue;
+       
+    }
+
+
     FoodData(float foodValue)
     {
         FoodValue = foodValue;

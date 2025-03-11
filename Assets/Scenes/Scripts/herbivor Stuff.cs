@@ -24,6 +24,7 @@ public class herbivorStuff : MonoBehaviour
     private Vector3 FoodLocaiton, moveDirection;
     public AIStates m_State;
     private float FoodCount = 100;
+    private float WaterCount = 100;
     private float m_Speed;
     private int m_Health;
     private Vector3 TargetLocation;
@@ -32,8 +33,10 @@ public class herbivorStuff : MonoBehaviour
     private bool isEating;
     private bool isDrinking;
     private float ReductionRate;
+    private float WaterReductionRate;
     private GameObject chasingCarnivore;
     private List<GameObject> FoundFood;
+    private List<GameObject> FoundWater;
     private SphereCollider sphereCollider;
     private GameObject CorpseRef;
     private float BoundX1, BoundX2, BoundZ1, BoundZ2;
@@ -48,6 +51,7 @@ public class herbivorStuff : MonoBehaviour
         //FoodLocaiton = FoodReference.transform.position;
         
         FoundFood = new List<GameObject>(); 
+        FoundWater = new List<GameObject>();
        UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
      
     }
@@ -73,6 +77,7 @@ public class herbivorStuff : MonoBehaviour
         InvokeRepeating("StateCheck", 1.0f, 0.5f);
         InvokeRepeating("Physics", 1.0f, 0.05f);
         InvokeRepeating("FoodDrain", 0, 0.5f);
+        InvokeRepeating("WaterDrain", 0, 1.0f);
     }
 
     void StateCheck()
@@ -91,14 +96,22 @@ public class herbivorStuff : MonoBehaviour
         
         if (m_State != AIStates.Fleeing)
         {   
-            if (FoodCount > 50)
+            if (FoodCount > 50 && WaterCount > 60)
             {
                 m_State = AIStates.Idle;
+            }
+            else if(WaterCount <= 60 && isMoving == false)
+            {
+                m_State = AIStates.Finding_Water;
             }
             else if (FoodCount <= 50 && isMoving == false)
             {
                 print("Help");
                 m_State = AIStates.Finding_Food;
+            }
+            else if(this.transform.position == TargetLocation && isDrinking == true)
+            {
+                m_State = AIStates.Drinking;
             }
             else if (this.transform.position == TargetLocation && isEating == true)
             {
@@ -136,11 +149,15 @@ public class herbivorStuff : MonoBehaviour
 
     }
 
-    void EatFood(GameObject foodRef)
+    void WaterDrain()
     {
-        Destroy(foodRef);
+        WaterCount = Mathf.Clamp(WaterCount + WaterReductionRate, 0, 100);
+        if(WaterCount == 0)
+        {
+            m_Health -= 5;
+            DeathCheck();
+        }
     }
-
 
 
     void Statemachine()
@@ -199,17 +216,29 @@ public class herbivorStuff : MonoBehaviour
                 }
                 break;
             case AIStates.Finding_Water:
+                if (FoundWater.Count == 0)
+                {
+                    TargetLocation.x += Random.Range(-20, 10);
+                    TargetLocation.z += Random.Range(-20, 10);
+                }
+                else if (isMoving == true)
+                {
+                    if (TargetLocation == this.transform.position)
+                    {
+                        isDrinking = true;
+                        isMoving = false;
+                    }
+                }
                 break;
             case AIStates.Drinking:
+                isDrinking = false;
+                isMoving = false;
+                WaterCount += FoundWater.FirstOrDefault().GetComponent<WaterScript>().DrinkingWater();
                 break;
             case AIStates.Eating:
                 isEating = false;
                 isMoving = false;
-                FoodCount += FoundFood.First().GetComponent<FoodData>().FoodValue;
-                GameObject gameObject = FoundFood.FirstOrDefault();
-                FoundFood.Remove(FoundFood.FirstOrDefault());
-                EatFood(gameObject);
-
+                FoodCount += FoundFood.First().GetComponent<FoodData>().EatFood();
                 break;
                 
         }
