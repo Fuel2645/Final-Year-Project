@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,20 +10,25 @@ public class CarnivoreScript : MonoBehaviour
 {
 
     public AIStates m_State;
-    private CharacterController characterController;
-    private GameObject ChasingEntity;
-    private Vector3 moveDirection, TargetLocation, m_MovementVector;
+    
+
     private float m_Speed;
     private float HuntChance;
-    public float FoodCount = 100;
+    private float FoodCount = 100;
+    private float WaterCount = 100;
     private float DesireToHunt;
     private float ReductionRate = 2.5f;
-    private int NeedToHunt;
     private float BoundX1, BoundX2, BoundZ1, BoundZ2;
     private float Distancce;
     private bool isMoving = false;
+    private int NeedToHunt;
+    private int m_Health;
+    private Vector3 moveDirection, TargetLocation, m_MovementVector;
+    private List<GameObject> FoundWater;
     private GameObject CorspeRef;
-    public int m_Health;
+    private CharacterController characterController;
+    private GameObject ChasingEntity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +64,7 @@ public class CarnivoreScript : MonoBehaviour
         InvokeRepeating("StateCheck", 1.0f, 0.5f);
         InvokeRepeating("Phyiscs", 0.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
+        InvokeRepeating("WaterDrain", 1.0f, 1.0f);
     }
 
 
@@ -80,9 +87,8 @@ public class CarnivoreScript : MonoBehaviour
         {
             TargetLocation.z = BoundZ2;
         }
-        if(ChasingEntity != null) {
-        Distancce = Vector3.Distance(this.transform.position, ChasingEntity.transform.position);
-            }
+
+
         moveDirection = TargetLocation - this.transform.position;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
         if (moveDirection.magnitude < 0.5)
@@ -113,6 +119,10 @@ public class CarnivoreScript : MonoBehaviour
             else if (HuntChance <= NeedToHunt)
             {
                 m_State = AIStates.Finding_Food;
+            }
+            else if(WaterCount <= 60)
+            {
+                m_State = AIStates.Finding_Water;
             }
         }
         
@@ -146,6 +156,33 @@ public class CarnivoreScript : MonoBehaviour
             case AIStates.Fleeing:
                 break;
             case AIStates.Finding_Water:
+                if(FoundWater.Count ==0)
+                {
+                    TargetLocation.x += Random.Range(-10, 11);
+                    TargetLocation.z += Random.Range(-10, 11);
+                }
+                else if(isMoving == true)
+                {
+                    if(TargetLocation == this.transform.position)
+                    {
+                        m_State = AIStates.Drinking;
+                        isMoving = false;
+                    }
+                }
+                else if(isMoving == false)
+                {
+                    if(FoundWater.Count > 1)
+                    {
+                        FoundWater.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
+                        TargetLocation = FoundWater.FirstOrDefault().transform.position;
+                        isMoving = true;
+                    }
+                    else if(FoundWater.Count > 0)
+                    {
+                        TargetLocation = FoundWater.FirstOrDefault().transform.position;
+                        isMoving = true;
+                    }
+                }
                 break;
             case AIStates.Finding_Food:
                 if(ChasingEntity == null && !isMoving)
@@ -188,6 +225,9 @@ public class CarnivoreScript : MonoBehaviour
                 ChasingEntity = null;
                 break;
             case AIStates.Drinking:
+                FoundWater.First().GetComponent<WaterScript>().DrinkingWater();
+                WaterCount += 40;
+                m_State = AIStates.Idle;
                 break;
         }
     }
@@ -217,6 +257,10 @@ public class CarnivoreScript : MonoBehaviour
                 ChasingEntity = other.gameObject;
             }
         }
+        else if(other.gameObject.tag == ("Water") && !FoundWater.Contains(other.gameObject))
+        {
+            FoundWater.Add(other.gameObject);
+        }
     }
 
 
@@ -224,6 +268,16 @@ public class CarnivoreScript : MonoBehaviour
     {
         FoodCount = Mathf.Clamp(FoodCount - ReductionRate, 0, 100);
         if (FoodCount == 0)
+        {
+            m_Health -= 5;
+            DeathCheck();
+        }
+    }
+
+    void WaterDrain()
+    {
+        WaterCount = Mathf.Clamp(WaterCount - ReductionRate, 0, 100);
+        if (WaterCount == 0)
         {
             m_Health -= 5;
             DeathCheck();
