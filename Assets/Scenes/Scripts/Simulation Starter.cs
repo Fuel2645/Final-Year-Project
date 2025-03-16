@@ -16,25 +16,25 @@ public class SimulationStarter : MonoBehaviour
 
     public int FoodSpawnerCount;
     public GameObject FoodSpawnerRef;
-    public float MinDelay, MaxDelay;
+    public float MinFoodDelay, MaxFoodDelay;
     public int MaxFoodCount;
     public GameObject FoodRef;
+
+    public int initialWaterCount;
+    public GameObject WaterRef;
+    public int MinWaterDelay, MaxWaterDelay;
+    public int MaxWaterCount;
 
     public GameObject CorpseRef;
     public float BoundX;
     public float BoundZ;
 
-    private List<GameObject> HerbivourList;
-    private List<GameObject> CarnivourList;
-    private List<GameObject> FoodSpawnerList;
+    private List<GameObject> WaterList;
 
 
 
     private void Start()
     {
-     
-
-
         Invoke("Test", 0.1f);
     }
 
@@ -67,6 +67,14 @@ public class SimulationStarter : MonoBehaviour
             Instantiate(FoodSpawnerRef, whereToSpawn, this.transform.rotation);
         }
 
+        for (int i = 0; i < initialWaterCount; i++)
+        {
+            whereToSpawn.x = UnityEngine.Random.Range(-BoundX, BoundX + 1);
+            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ, BoundZ + 1);
+            whereToSpawn.y = 0;
+            Instantiate(WaterRef, whereToSpawn, this.transform.rotation);
+        }
+
         foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Herbivore"))
         {
             gameObject.GetComponent<herbivorStuff>().initialise(BoundX, BoundZ, HerbivourHealth, HerbivourSpeed, CorpseRef);
@@ -80,8 +88,39 @@ public class SimulationStarter : MonoBehaviour
         }
         foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("FoodSpawner"))
         {
-            gameObject.GetComponent<FoodScript>().initialise(BoundX, BoundZ, MaxFoodCount, MaxDelay, MinDelay, FoodRef);
+            gameObject.GetComponent<FoodScript>().initialise(BoundX, BoundZ, MaxFoodCount, MaxFoodDelay, MinFoodDelay, FoodRef);
+        }
+
+
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Water"))
+        {
+            WaterList.Add(gameObject);
         }
     }
 
+
+    private void RandomWaterSpawn()
+    {
+        int rnd = Random.Range(MinWaterDelay, MaxWaterDelay + 1);
+        Invoke("WaterSpawn", rnd);
+    }
+
+    private void WaterSpawn()
+    {
+        Vector3 whereToSpawn = transform.position;
+        if (WaterList.Count < MaxWaterCount)
+        {
+            whereToSpawn.x = UnityEngine.Random.Range(-BoundX, BoundX + 1);
+            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ, BoundZ + 1);
+            whereToSpawn.y = 0;
+            Instantiate(WaterRef, whereToSpawn, this.transform.rotation);
+
+            WaterList.Clear();
+            foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Water"))
+            {
+                WaterList.Add(gameObject);
+            }
+        }
+
+    }
 }
