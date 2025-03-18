@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
 public class SimulationStarter : MonoBehaviour
@@ -35,17 +36,29 @@ public class SimulationStarter : MonoBehaviour
 
     private void Start()
     {
+        WaterList = new List<GameObject>();
         Invoke("Test", 0.1f);
     }
 
 
     void Test()
     {
-        Vector3 whereToSpawn = transform.position;
-        for (int i = 0; i < HerbivourCount; i++)
+        UnityEngine.Vector3 whereToSpawn = transform.position;
+        UnityEngine.Quaternion waterRotation = this.transform.rotation;
+        waterRotation.x = 180;
+
+        for (int i = 0; i < initialWaterCount; i++)
         {
             whereToSpawn.x = UnityEngine.Random.Range(-BoundX, BoundX + 1);
             whereToSpawn.z = UnityEngine.Random.Range(-BoundZ, BoundZ + 1);
+            whereToSpawn.y = 0;
+            Instantiate(WaterRef, whereToSpawn, waterRotation);
+        }
+
+        for (int i = 0; i < HerbivourCount; i++)
+        {
+            whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 2, (BoundX + 1) / 2);
+            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ / 2, (BoundZ + 1) / 2);
             whereToSpawn.y = 0;
             Instantiate(HerbivourRef, whereToSpawn, this.transform.rotation);
         }
@@ -56,6 +69,7 @@ public class SimulationStarter : MonoBehaviour
             whereToSpawn.z = UnityEngine.Random.Range(-BoundZ, BoundZ + 1);
             whereToSpawn.y = 0;
             Instantiate(CarnivourRef, whereToSpawn, this.transform.rotation);
+            
         }
 
 
@@ -67,13 +81,7 @@ public class SimulationStarter : MonoBehaviour
             Instantiate(FoodSpawnerRef, whereToSpawn, this.transform.rotation);
         }
 
-        for (int i = 0; i < initialWaterCount; i++)
-        {
-            whereToSpawn.x = UnityEngine.Random.Range(-BoundX, BoundX + 1);
-            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ, BoundZ + 1);
-            whereToSpawn.y = 0;
-            Instantiate(WaterRef, whereToSpawn, this.transform.rotation);
-        }
+        
 
         foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Herbivore"))
         {
@@ -94,8 +102,13 @@ public class SimulationStarter : MonoBehaviour
 
         foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Water"))
         {
-            WaterList.Add(gameObject);
+            if(gameObject != null)
+            {
+                WaterList.Add(gameObject);
+            }
+            
         }
+        RandomWaterSpawn();
     }
 
 
@@ -107,7 +120,7 @@ public class SimulationStarter : MonoBehaviour
 
     private void WaterSpawn()
     {
-        Vector3 whereToSpawn = transform.position;
+        UnityEngine.Vector3 whereToSpawn = transform.position;
         if (WaterList.Count < MaxWaterCount)
         {
             whereToSpawn.x = UnityEngine.Random.Range(-BoundX, BoundX + 1);
@@ -121,6 +134,7 @@ public class SimulationStarter : MonoBehaviour
                 WaterList.Add(gameObject);
             }
         }
+
 
     }
 }

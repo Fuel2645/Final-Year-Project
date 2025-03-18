@@ -24,10 +24,10 @@ public class CarnivoreScript : MonoBehaviour
     private int NeedToHunt;
     private int m_Health;
     private Vector3 moveDirection, TargetLocation, m_MovementVector;
-    private List<GameObject> FoundWater;
+    public List<GameObject> FoundWater;
     private GameObject CorspeRef;
     private CharacterController characterController;
-    private GameObject ChasingEntity;
+    public GameObject ChasingEntity;
 
     // Start is called before the first frame update
     void Start()
@@ -144,6 +144,8 @@ public class CarnivoreScript : MonoBehaviour
 
                 if (rnd == 0)
                 {
+                    TargetLocation = this.transform.position;
+                    TargetLocation.y = 0;
                     TargetLocation.x += Random.Range(-10, 11);
                     TargetLocation.z += Random.Range(-10, 11);
                 }
@@ -158,6 +160,8 @@ public class CarnivoreScript : MonoBehaviour
             case AIStates.Finding_Water:
                 if(FoundWater.Count ==0)
                 {
+                    TargetLocation = this.transform.position;
+                    TargetLocation.y = 0;
                     TargetLocation.x += Random.Range(-10, 11);
                     TargetLocation.z += Random.Range(-10, 11);
                 }
@@ -187,6 +191,7 @@ public class CarnivoreScript : MonoBehaviour
             case AIStates.Finding_Food:
                 if(ChasingEntity == null && !isMoving)
                 {
+                    TargetLocation = this.transform.position;
                     TargetLocation.x += Random.Range(-20, 21);
                     TargetLocation.z += Random.Range(-20, 21);
                     isMoving = true;
@@ -245,7 +250,7 @@ public class CarnivoreScript : MonoBehaviour
                 ChasingEntity = other.gameObject;
             }
         }
-        else if (other.gameObject.tag == ("Corpse") && other is not BoxCollider)
+        else if (other.gameObject.tag == ("Corpse") && other.gameObject != ChasingEntity)
         {
             print("Corpse");
             if (ChasingEntity == null)
@@ -281,6 +286,16 @@ public class CarnivoreScript : MonoBehaviour
         {
             m_Health -= 5;
             DeathCheck();
+        }
+    }
+
+    public void TouchingWater()
+    {
+        if (m_State == AIStates.Finding_Water)
+        {
+            TargetLocation = this.transform.position;
+            isMoving = false;
+            m_State = AIStates.Drinking;
         }
     }
 

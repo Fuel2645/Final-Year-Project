@@ -244,11 +244,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: BoundX
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: BoundZ
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: FoodRef
@@ -262,6 +262,10 @@ PrefabInstance:
       propertyPath: MinDelay
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: WaterRef
+      value: 
+      objectReference: {fileID: 8640877874532644282, guid: 730aa4734ca67f441be8284f2970936d, type: 3}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: CorpseRef
       value: 
@@ -283,8 +287,28 @@ PrefabInstance:
       value: 126
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MaxFoodDelay
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MinFoodDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MaxWaterCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MaxWaterDelay
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MinWaterDelay
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: CarnivourCount
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: CarnivourSpeed
@@ -296,7 +320,7 @@ PrefabInstance:
       objectReference: {fileID: 7800101575817635340, guid: c5572d73f0c4ec0469923f1b3d0637d1, type: 3}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: HerbivourCount
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: HerbivourSpeed
@@ -312,7 +336,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: FoodSpawnerCount
-      value: 20
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: initialWaterCount
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4607138696745332977, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: m_Name

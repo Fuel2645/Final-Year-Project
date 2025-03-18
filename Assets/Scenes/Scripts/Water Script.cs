@@ -13,6 +13,20 @@ public class WaterScript : MonoBehaviour
             Destroy(this.gameObject);
         }
         return WaterCount -= 40;
-        
+
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == ("Carnivore"))
+        {
+            other.gameObject.GetComponent<CarnivoreScript>().TouchingWater();
+        }
+        else if(other.gameObject.tag == ("Herbivore"))
+        {
+            other.gameObject.GetComponent<herbivorStuff>().TouchingWater();
+        }
+    }
+
 }

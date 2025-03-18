@@ -27,18 +27,21 @@ public class herbivorStuff : MonoBehaviour
     private float m_Speed;
     private float BoundX1, BoundX2, BoundZ1, BoundZ2;
     private float ReductionRate;
-    private bool isMoving = false;
+    public bool isMoving = false;
     private int m_Health;
     private Vector3 FoodLocaiton, moveDirection;
     private Vector3 TargetLocation;
     private Vector3 m_MovementVector;
+    private Vector3 ReachBox;
+    private Vector3 PreviousTargetLocation;
     private GameObject chasingCarnivore;
-    private List<GameObject> FoundFood;
-    private List<GameObject> FoundWater;
+    public List<GameObject> FoundFood;
+    public List<GameObject> FoundWater;
     private SphereCollider sphereCollider;
     private GameObject CorpseRef;
     private CharacterController characterController;
-   
+    public float distgancse;
+    
 
 
 
@@ -53,7 +56,7 @@ public class herbivorStuff : MonoBehaviour
         FoundFood = new List<GameObject>(); 
         FoundWater = new List<GameObject>();
        UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
-
+        ReachBox = new Vector3(1.5f, 0, 1.5f);
     }
 
     // Update is called once per frame
@@ -75,7 +78,7 @@ public class herbivorStuff : MonoBehaviour
 
         m_State = AIStates.Idle;
         InvokeRepeating("StateCheck", 1.0f, 0.5f);
-        InvokeRepeating("Physics", 1.0f, 0.05f);
+        InvokeRepeating("physics", 1.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain",1.0f,1.0f);
     }
@@ -109,13 +112,13 @@ public class herbivorStuff : MonoBehaviour
                 print("Help");
                 m_State = AIStates.Finding_Food;
             }
-            Statemachine();
         }
         else if(m_State == AIStates.Fleeing) 
         {
             if (chasingCarnivore != null && Vector3.Distance(chasingCarnivore.transform.position, this.transform.position) >= 10)
             {
                 m_State = AIStates.Idle;
+                TargetLocation = PreviousTargetLocation;
             }
             else if (chasingCarnivore != null && this.transform.position == TargetLocation)
             {
@@ -125,8 +128,10 @@ public class herbivorStuff : MonoBehaviour
             else if (chasingCarnivore == null)
             {
                 m_State = AIStates.Idle;
+                TargetLocation = PreviousTargetLocation;
             }
         }
+        Statemachine();
     }
 
     void FoodDrain()
@@ -161,6 +166,7 @@ public class herbivorStuff : MonoBehaviour
                 int rnd = Random.Range(0, 2);
                 if (rnd == 0)
                 {
+                    TargetLocation = this.transform.position;
                     TargetLocation.x += Random.Range(-10, 11);
                     TargetLocation.z += Random.Range(-10, 11);
                     TargetLocation.y = 0;
@@ -180,12 +186,16 @@ public class herbivorStuff : MonoBehaviour
             case AIStates.Finding_Food:
                 if (FoundFood.Count == 0)
                 {
-                    TargetLocation.x += Random.Range(-20, 10);
-                    TargetLocation.z += Random.Range(-20, 10);
+                    TargetLocation = this.transform.position;
+                    TargetLocation.y = 0;
+                    TargetLocation.x += Random.Range(-20, 21);
+                    TargetLocation.z += Random.Range(-20, 21);
+                    print("Idle Move");
                 }
                 else if (isMoving == true)
                 {
-                    if (TargetLocation == this.transform.position)
+                    print("Is Moving");
+                    if (Vector3.Distance(this.transform.position, FoundFood.First().transform.position) <= 2)
                     {
                         isMoving = false;
                         m_State = AIStates.Eating;
@@ -193,6 +203,7 @@ public class herbivorStuff : MonoBehaviour
                 }
                 else if (isMoving == false)
                 {
+                   
                     // sorts Foods based on distance from the player in ascending order, closest == first 
                     if (FoundFood.Count > 1)
                     {
@@ -203,6 +214,7 @@ public class herbivorStuff : MonoBehaviour
                     }
                     else if (FoundFood.Count > 0)
                     {
+                        print("First or default");
                         TargetLocation = FoundFood.FirstOrDefault().transform.position;
                         isMoving = true;
                     }
@@ -211,16 +223,23 @@ public class herbivorStuff : MonoBehaviour
             case AIStates.Finding_Water:
                 if (FoundWater.Count == 0)
                 {
-                    TargetLocation.x += Random.Range(-20, 10);
-                    TargetLocation.z += Random.Range(-20, 10);
+                    TargetLocation = this.transform.position;
+                    TargetLocation.y = 0;
+                    TargetLocation.x += Random.Range(-20, 21);
+                    TargetLocation.z += Random.Range(-20, 21);
+                    
                 }
                 else if (isMoving == true)
                 {
-                    if (TargetLocation == this.transform.position)
+                    foreach( Collider collider in Physics.OverlapBox(this.transform.position, ReachBox))
                     {
-                        m_State = AIStates.Drinking;
-                        isMoving = false;
-                    }
+                        if(collider.gameObject.tag == "Water")
+                        {
+                            isMoving = false;
+                            m_State = AIStates.Drinking;
+                        }
+                    }    
+                    
                 }
                 else if (isMoving == false)
                 {
@@ -245,9 +264,18 @@ public class herbivorStuff : MonoBehaviour
                 m_State = AIStates.Idle;
                 break;
             case AIStates.Eating:
-                FoundFood.First().GetComponent<FoodData>().EatFood();
-                FoodCount += 40;
-                m_State = AIStates.Idle;
+                if(FoundFood.Count() > 0)
+                {
+                    FoundFood.First().GetComponent<FoodData>().EatFood();
+                    FoodCount += 40;
+                    m_State = AIStates.Idle;
+                }
+                else
+                {
+                    m_State = AIStates.Finding_Food;
+                }
+               
+                
                 break;
                 
         }
@@ -263,6 +291,18 @@ public class herbivorStuff : MonoBehaviour
             }
         }
     }
+
+
+    public void TouchingWater()
+    {
+        if (m_State == AIStates.Finding_Water)
+        {
+            TargetLocation = this.transform.position;
+            isMoving = false;
+            m_State = AIStates.Drinking;
+        }
+    }
+
 
     public void GetEatenBitch()
     {
@@ -284,7 +324,7 @@ public class herbivorStuff : MonoBehaviour
 
     }
 
-    void Physics()
+    void physics()
     {
         if(TargetLocation.x >= BoundX1 )
         {
@@ -321,22 +361,21 @@ public class herbivorStuff : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider == sphereCollider)
-        {
-            print("Testing");
-            // Carnviore attack idk
-        }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.collider == sphereCollider)
+    //    {
+    //        print("Testing");
+    //        // Carnviore attack idk
+    //    }
 
-    }
+    //}
 
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
         {
-
             FoundFood.Add(other.gameObject);
 
         }
@@ -349,12 +388,13 @@ public class herbivorStuff : MonoBehaviour
         {
             print("Carnivore");
             m_State = AIStates.Fleeing;
+            PreviousTargetLocation = TargetLocation;
             TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
             chasingCarnivore = other.gameObject;
         }
         else
         {
-            print("dick");
+           // print("dick");
         }
     }
 

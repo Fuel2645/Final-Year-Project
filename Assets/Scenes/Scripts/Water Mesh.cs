@@ -61,7 +61,9 @@ public class WaterMesh : MonoBehaviour
 
     private void Moving()
     {
+        Vector3 vector3 = new Vector3(20, 20, 20);
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1, this.transform.position.z);
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z);
+        this.transform.localScale = vector3;
     }
 }
