@@ -56,10 +56,10 @@ public class WaterMesh : MonoBehaviour
         GetComponent<MeshCollider>().isTrigger = true;
 
 
-        Invoke("Moving", 0.2f);
+       // Invoke("Moving", 0.2f);
     }
 
-    private void Moving()
+    public void Moving()
     {
         Vector3 vector3 = new Vector3(20, 20, 20);
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1, this.transform.position.z);

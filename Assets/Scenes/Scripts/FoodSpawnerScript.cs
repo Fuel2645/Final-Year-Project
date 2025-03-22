@@ -10,13 +10,13 @@ public class FoodScript : MonoBehaviour
     private float BoundX, BoundZ;
     private int FoodLimit;
     private float Min, Max;
-
+    private Vector3 ReachBox;
 
     public void initialise(float gBoundX, float gBoundZ, int MaxFood, float MinDelay, float MaxDelay, GameObject FoodRef)
     {
         print("Food Spawner Start");
 
-
+        ReachBox = new Vector3(3, 3, 3);
         BoundX = gBoundX;
         BoundZ = gBoundZ;
         FoodLimit = MaxFood;
@@ -45,8 +45,17 @@ public class FoodScript : MonoBehaviour
             Vector3 spawnLocation = new Vector3(0, 0, 0);
             spawnLocation.x = rndX;
             spawnLocation.z = rndZ;
-            spawnedFood.Add(Instantiate(foodRef, spawnLocation, this.transform.rotation));
-            spawnedFood.LastOrDefault().GetComponent<FoodData>().FoodValue = Random.Range(10,41);
+            if(Physics.CheckBox(spawnLocation,ReachBox))
+            {
+                print("True");
+            }
+            else
+            {
+                spawnedFood.Add(Instantiate(foodRef, spawnLocation, this.transform.rotation));
+                spawnedFood.LastOrDefault().GetComponent<FoodData>().FoodValue = Random.Range(10, 41);
+            }
+
+           
         }
 
         RandomFoodTimer();
