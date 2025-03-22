@@ -23,7 +23,7 @@ public class CarnivoreScript : MonoBehaviour
     private bool isMoving = false;
     private int NeedToHunt;
     private int m_Health;
-    private Vector3 moveDirection, TargetLocation, m_MovementVector;
+    private Vector3 moveDirection, TargetLocation, m_MovementVector, ReachBox;
     public List<GameObject> FoundWater;
     private GameObject CorspeRef;
     private CharacterController characterController;
@@ -35,7 +35,7 @@ public class CarnivoreScript : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         m_MovementVector = this.transform.position;
         TargetLocation = this.transform.position;
-        
+        ReachBox = new Vector3(1.5f, 5.0f, 1.5f);
     }
 
 
@@ -61,7 +61,11 @@ public class CarnivoreScript : MonoBehaviour
         BoundZ1 = BoundZ;
         BoundZ2 = -1 * BoundZ;
 
-        InvokeRepeating("StateCheck", 1.0f, 0.5f);
+        float rnd1, rnd2;
+        rnd1 = Random.Range(0.2f, 0.9f);
+        rnd2 = Random.Range(0.7f, 1.3f);
+
+        InvokeRepeating("StateCheck", rnd2, rnd1);
         InvokeRepeating("Phyiscs", 0.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain", 1.0f, 1.0f);
@@ -116,14 +120,14 @@ public class CarnivoreScript : MonoBehaviour
             {
                 m_State = AIStates.Idle;
             }
-            else if (HuntChance <= NeedToHunt)
-            {
-                m_State = AIStates.Finding_Food;
-            }
-            else if(WaterCount <= 60)
+            else if (WaterCount <= 60)
             {
                 m_State = AIStates.Finding_Water;
             }
+            else if (HuntChance <= NeedToHunt)
+            {
+                m_State = AIStates.Finding_Food;
+            } 
         }
         
        
@@ -167,10 +171,14 @@ public class CarnivoreScript : MonoBehaviour
                 }
                 else if(isMoving == true)
                 {
-                    if(TargetLocation == this.transform.position)
+                    foreach (Collider collider in Physics.OverlapBox(this.transform.position, ReachBox))
                     {
-                        m_State = AIStates.Drinking;
-                        isMoving = false;
+                        if(collider.tag == "Water")
+                        {
+                            m_State = AIStates.Drinking;
+                            isMoving = false;
+                        }
+                        
                     }
                 }
                 else if(isMoving == false)
@@ -180,6 +188,7 @@ public class CarnivoreScript : MonoBehaviour
                         FoundWater.Sort((x, y) => { return (this.transform.position - x.transform.position).sqrMagnitude.CompareTo((this.transform.position - y.transform.position).sqrMagnitude); });
                         TargetLocation = FoundWater.FirstOrDefault().transform.position;
                         isMoving = true;
+
                     }
                     else if(FoundWater.Count > 0)
                     {
@@ -215,6 +224,7 @@ public class CarnivoreScript : MonoBehaviour
             case AIStates.Eating:
                 if (ChasingEntity.tag == "Corpse")
                 {
+                    print("Eating Corpse");
                     ChasingEntity.GetComponent<CorspseScript>().EatMe();
                 }
                 else if (ChasingEntity.tag == "Herbivore")
@@ -312,6 +322,7 @@ public class CarnivoreScript : MonoBehaviour
         if(m_Health <= 0)
         {
             Instantiate(CorspeRef, this.transform.position, this.transform.rotation);
+            print("Name " + this.gameObject.name + " FoodCount " + FoodCount + " Water Count " + WaterCount);
             Destroy(this.gameObject);
         }
     }

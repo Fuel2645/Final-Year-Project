@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CorspseScript : MonoBehaviour
 {
-    int Health = 100;
+    int Health = 50;
 
     public void EatMe()
     {

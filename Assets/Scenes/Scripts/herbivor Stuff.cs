@@ -55,8 +55,8 @@ public class herbivorStuff : MonoBehaviour
         
         FoundFood = new List<GameObject>(); 
         FoundWater = new List<GameObject>();
-       UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
-        ReachBox = new Vector3(1.5f, 0, 1.5f);
+        UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
+        ReachBox = new Vector3(1.5f, 3.0f, 1.5f);
     }
 
     // Update is called once per frame
@@ -77,7 +77,12 @@ public class herbivorStuff : MonoBehaviour
         m_Speed = Speed;
 
         m_State = AIStates.Idle;
-        InvokeRepeating("StateCheck", 1.0f, 0.5f);
+
+        float rnd1, rnd2;
+        rnd1 = Random.Range(0.2f, 0.9f);
+        rnd2 = Random.Range(0.7f, 1.3f);
+
+        InvokeRepeating("StateCheck", rnd2, rnd1);
         InvokeRepeating("physics", 1.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain",1.0f,1.0f);
@@ -391,6 +396,9 @@ public class herbivorStuff : MonoBehaviour
             PreviousTargetLocation = TargetLocation;
             TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
             chasingCarnivore = other.gameObject;
+            isMoving = false;
+            
+          
         }
         else
         {
