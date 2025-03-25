@@ -48,6 +48,7 @@ public class CarnivoreScript : MonoBehaviour
     public void initialise(float BoundX, float BoundZ, int Health, float Speed, GameObject Corpse)
     {
         CorspeRef = Corpse;
+        float NextBirthingTime = Random.Range(60.0f, 121.0f);
 
         print("Carnivore Start");
 
@@ -69,6 +70,7 @@ public class CarnivoreScript : MonoBehaviour
         InvokeRepeating("Phyiscs", 0.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain", 1.0f, 1.0f);
+        Invoke("Birthing", NextBirthingTime);
     }
 
 
@@ -95,7 +97,7 @@ public class CarnivoreScript : MonoBehaviour
 
         moveDirection = TargetLocation - this.transform.position;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
-        if (moveDirection.magnitude < 0.5)
+        if (moveDirection.magnitude <= 0.6)
         {
             this.transform.position = TargetLocation;
             isMoving = false;
@@ -155,7 +157,7 @@ public class CarnivoreScript : MonoBehaviour
                 }
                 else
                 {
-                    TargetLocation = transform.position;
+                    TargetLocation = this.transform.position;
                     
                 }
                 break;
@@ -198,14 +200,26 @@ public class CarnivoreScript : MonoBehaviour
                 }
                 break;
             case AIStates.Finding_Food:
-                if(ChasingEntity == null && !isMoving)
+                if(ChasingEntity == null)
                 {
-                    TargetLocation = this.transform.position;
-                    TargetLocation.x += Random.Range(-20, 21);
-                    TargetLocation.z += Random.Range(-20, 21);
-                    isMoving = true;
+                    if(!isMoving)
+                    {
+                        TargetLocation = this.transform.position;
+                        TargetLocation.x += Random.Range(-20, 21);
+                        TargetLocation.z += Random.Range(-20, 21);
+                        isMoving = true;
+                    }
+                    else
+                    {
+                        if(this.transform.position == TargetLocation)
+                        {
+                            isMoving = false;
+                        }
+                    }
+                    
                 }
-                else if(ChasingEntity != null)
+                
+                else if (ChasingEntity != null)
                 {
                     if (Vector3.Distance(this.transform.position, ChasingEntity.transform.position) <= 5)
                     {
@@ -222,12 +236,17 @@ public class CarnivoreScript : MonoBehaviour
                 
                 break;
             case AIStates.Eating:
-                if (ChasingEntity.tag == "Corpse")
+                if(ChasingEntity == null)
+                {
+                    m_State = AIStates.Finding_Food;
+                    break;
+                }
+                else if (ChasingEntity.tag == "Corpse" && ChasingEntity != null)
                 {
                     print("Eating Corpse");
                     ChasingEntity.GetComponent<CorspseScript>().EatMe();
                 }
-                else if (ChasingEntity.tag == "Herbivore")
+                else if (ChasingEntity.tag == "Herbivore" && ChasingEntity != null)
                 {
                     print("Tesitng");
                     ChasingEntity.GetComponent<herbivorStuff>().GetEatenBitch();
@@ -278,6 +297,22 @@ public class CarnivoreScript : MonoBehaviour
         }
     }
 
+    private void Birthing()
+    {
+        if(m_Health >= 50 && FoodCount >= 50 && WaterCount >= 50)
+        {
+            print("Giving Birth");
+            GameObject child = new GameObject();
+            float childSpeed = Random.Range(m_Speed - 0.2f, m_Speed + 0.3f);
+            child = Instantiate(this.gameObject, this.transform.position, this.transform.rotation);
+            child.GetComponent<CarnivoreScript>().initialise(BoundX1, BoundZ1, 100,childSpeed,CorspeRef);
+        }
+
+        float NextBirthingTime = Random.Range(60.0f, 121.0f);
+        Invoke("Birthing", NextBirthingTime);
+    }
+
+
 
     void FoodDrain()
     {
@@ -301,12 +336,14 @@ public class CarnivoreScript : MonoBehaviour
 
     public void TouchingWater()
     {
+
         if (m_State == AIStates.Finding_Water)
         {
             TargetLocation = this.transform.position;
             isMoving = false;
             m_State = AIStates.Drinking;
         }
+
     }
 
     private void OnTriggerExit(Collider other)

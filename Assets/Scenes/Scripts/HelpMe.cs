@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraScript : MonoBehaviour
@@ -14,6 +15,11 @@ public class CameraScript : MonoBehaviour
     void Start()
     {
         m_Position = this.transform.position;
+        float BoundX = FindObjectOfType(typeof(Camera)).GetComponent<SimulationStarter>().BoundX;
+        float BoundZ = FindObjectOfType(typeof(Camera)).GetComponent<SimulationStarter>().BoundZ;
+
+        m_Position.y = MathF.Sqrt((BoundX * BoundX)+(BoundZ*BoundZ)) * 4;
+
     }
 
     // Update is called once per frame

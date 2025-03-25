@@ -64,6 +64,7 @@ public class herbivorStuff : MonoBehaviour
     {
         ReductionRate = -2.5f;
         CorpseRef = Corpse;
+        float NextBirthingTime = Random.Range(20.0f, 40.0f);
 
         print("Herbivore Start");
 
@@ -86,6 +87,7 @@ public class herbivorStuff : MonoBehaviour
         InvokeRepeating("physics", 1.0f, 0.05f);
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain",1.0f,1.0f);
+        Invoke("Birthing", NextBirthingTime);
     }
 
     void StateCheck()
@@ -162,7 +164,20 @@ public class herbivorStuff : MonoBehaviour
         }
     }
 
+    private void Birthing()
+    {
+        if (m_Health >= 25 && FoodCount >= 20 && WaterCount >= 20)
+        {
+            print("Giving Birth");
+            GameObject child = new GameObject();
+            float childSpeed = Random.Range(m_Speed - 0.2f, m_Speed + 0.3f);
+            child = Instantiate(this.gameObject, this.transform.position, this.transform.rotation);
+            child.GetComponent<herbivorStuff>().initialise(BoundX1, BoundZ1, 100, childSpeed, CorpseRef);
+        }
 
+        float NextBirthingTime = Random.Range(20.0f, 40.0f);
+        Invoke("Birthing", NextBirthingTime);
+    }
     void Statemachine()
     {
         switch (m_State)
@@ -300,6 +315,7 @@ public class herbivorStuff : MonoBehaviour
 
     public void TouchingWater()
     {
+
         if (m_State == AIStates.Finding_Water)
         {
             TargetLocation = this.transform.position;
