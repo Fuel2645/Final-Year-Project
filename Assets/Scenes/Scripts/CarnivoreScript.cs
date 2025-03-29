@@ -97,7 +97,7 @@ public class CarnivoreScript : MonoBehaviour
 
         moveDirection = TargetLocation - this.transform.position;
         m_MovementVector = moveDirection.normalized * m_Speed * 0.05f;
-        if (moveDirection.magnitude <= 0.6)
+        if (Vector3.Distance(this.transform.position, TargetLocation) <= Vector3.Distance(this.transform.position + m_MovementVector, TargetLocation))
         {
             this.transform.position = TargetLocation;
             isMoving = false;
