@@ -44,20 +44,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4243bb9b684b3af4a9055c1a1fa726eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HerbivourCount: 0
-  HerbivourRef: {fileID: 0}
-  HerbivourSpeed: 0
-  HerbivourHealth: 0
-  CarnivourCount: 0
-  CarnivourRef: {fileID: 0}
-  CarnivourSpeed: 0
-  CarnivourHealth: 0
-  FoodSpawnerCount: 0
-  FoodSpawnerRef: {fileID: 0}
-  MinDelay: 0
-  MaxDelay: 0
-  MaxFoodCount: 0
-  FoodRef: {fileID: 0}
-  CorpseRef: {fileID: 0}
-  BoundX: 0
-  BoundZ: 0
+  MapSize: 0
+  HerbivourCount: 10
+  HerbivourRef: {fileID: 3125096015071511949, guid: b99f82ac4377b3541ad1489521a2f534, type: 3}
+  HerbivourSpeed: 20
+  HerbivourHealth: 100
+  CarnivourCount: 10
+  CarnivourRef: {fileID: 3621615830299103185, guid: 23aba3e9f78d1da418d65f57f5f99fe9, type: 3}
+  CarnivourSpeed: 25
+  CarnivourHealth: 100
+  FoodSpawnerCount: 4
+  FoodSpawnerRef: {fileID: 7800101575817635340, guid: c5572d73f0c4ec0469923f1b3d0637d1, type: 3}
+  MinFoodDelay: 0.5
+  MaxFoodDelay: 2
+  MaxFoodCount: 100
+  FoodRef: {fileID: 5252876713983766990, guid: d2d06da8d99f277449de0856c01accdc, type: 3}
+  initialWaterCount: 2
+  WaterRef: {fileID: 8640877874532644282, guid: 730aa4734ca67f441be8284f2970936d, type: 3}
+  MinWaterDelay: 60
+  MaxWaterDelay: 120
+  MaxWaterCount: 3
+  CorpseRef: {fileID: 3016863424008661572, guid: bdfad7427ffb22f479d303f84bf6c7ea, type: 3}
+  BoundX: 50
+  BoundZ: 50

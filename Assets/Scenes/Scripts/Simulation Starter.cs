@@ -4,29 +4,38 @@ using System.Linq;
 using System.Numerics;
 using UnityEngine;
 
+public enum Sizes
+{
+    Custom,
+    Small,
+    Medium,
+    Large,
+    Enormous
+}
+
+
+
 public class SimulationStarter : MonoBehaviour
 {
+    [SerializeField]
+    public Sizes MapSize;
     public int HerbivourCount;
     public GameObject HerbivourRef;
     public float HerbivourSpeed;
     public int HerbivourHealth;
-
     public int CarnivourCount;
     public GameObject CarnivourRef;
     public float CarnivourSpeed;
     public int CarnivourHealth;
-
     public int FoodSpawnerCount;
     public GameObject FoodSpawnerRef;
     public float MinFoodDelay, MaxFoodDelay;
     public int MaxFoodCount;
     public GameObject FoodRef;
-
     public int initialWaterCount;
     public GameObject WaterRef;
     public int MinWaterDelay, MaxWaterDelay;
     public int MaxWaterCount;
-
     public GameObject CorpseRef;
     public float BoundX;
     public float BoundZ;
@@ -43,7 +52,10 @@ public class SimulationStarter : MonoBehaviour
         Invoke("WaterSpawn", 0.1f);
         
     }
-
+    private void OnEnable()
+    {
+        BoundZ = 999999;
+    }
 
     void WaterSpawn()
     {
@@ -91,14 +103,14 @@ public class SimulationStarter : MonoBehaviour
 
         for (int i = 0; i < CarnivourCount; i++)
         {
-            whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 2, (BoundX / 2) + 1);
-            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ / 2, (BoundZ / 2) + 1);
+            whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 4, (BoundX / 4) + 1);
+            whereToSpawn.z = UnityEngine.Random.Range(-BoundZ / 4, (BoundZ / 4) + 1);
             whereToSpawn.y = 0;
 
             while (Physics.CheckBox(whereToSpawn, FoodCheck, waterRotation, 31, QueryTriggerInteraction.Collide))
             {
-                whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 2, (BoundX / 2) + 1);
-                whereToSpawn.z = UnityEngine.Random.Range(-BoundZ / 2, (BoundZ / 2) + 1);
+                whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 4, (BoundX / 4) + 1);
+                whereToSpawn.z = UnityEngine.Random.Range(-BoundZ / 4, (BoundZ / 4) + 1);
             }
 
 

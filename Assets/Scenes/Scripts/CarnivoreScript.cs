@@ -221,7 +221,7 @@ public class CarnivoreScript : MonoBehaviour
                 
                 else if (ChasingEntity != null)
                 {
-                    if (Vector3.Distance(this.transform.position, ChasingEntity.transform.position) <= 5)
+                    if (Vector3.Distance(this.transform.position, ChasingEntity.transform.position) <= 7)
                     {
                         print("Eatrings");
                         m_State = AIStates.Eating;

@@ -237,6 +237,14 @@ public class herbivorStuff : MonoBehaviour
                         print("First or default");
                         TargetLocation = FoundFood.FirstOrDefault().transform.position;
                         isMoving = true;
+
+                       
+                    }
+
+                    if (Vector3.Distance(this.transform.position, FoundFood.First().transform.position) <= 2)
+                    {
+                        isMoving = false;
+                        m_State = AIStates.Eating;
                     }
                 }
                 break;
