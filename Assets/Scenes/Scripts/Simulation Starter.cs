@@ -17,8 +17,8 @@ public enum Sizes
 
 public class SimulationStarter : MonoBehaviour
 {
-    [SerializeField]
     public Sizes MapSize;
+
     public int HerbivourCount;
     public GameObject HerbivourRef;
     public float HerbivourSpeed;
@@ -47,15 +47,12 @@ public class SimulationStarter : MonoBehaviour
     private void Start()
     {
         WaterList = new List<GameObject>();
-        FoodCheck = new UnityEngine.Vector3(3,3,3);
+        FoodCheck = new UnityEngine.Vector3(1,1,1);
         Watercheck = new UnityEngine.Vector3(15, 1,15);
         Invoke("WaterSpawn", 0.1f);
         
     }
-    private void OnEnable()
-    {
-        BoundZ = 999999;
-    }
+
 
     void WaterSpawn()
     {

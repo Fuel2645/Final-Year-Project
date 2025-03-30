@@ -54,7 +54,7 @@ public class SImulationInspectorScript : Editor
         BoundX = serializedObject.FindProperty("BoundX");
         BoundZ = serializedObject.FindProperty("BoundZ");
 
-        
+
     }
 
 
@@ -62,7 +62,7 @@ public class SImulationInspectorScript : Editor
     {
         serializedObject.Update();
         EditorGUILayout.PropertyField(MapSize);
-        if(MapSize.enumValueIndex != 0)
+        if (MapSize.enumValueIndex != 0)
         {
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.PropertyField(HerbivourCount);
@@ -120,12 +120,12 @@ public class SImulationInspectorScript : Editor
                 MinFoodDelay.floatValue = 0.5f;
                 MaxFoodDelay.floatValue = 2.0f;
                 MaxFoodCount.intValue = 100;
-                initialWaterCount.intValue = 2;
+                initialWaterCount.intValue = 1;
                 MinWaterDelay.intValue = 60;
                 MaxWaterDelay.intValue = 120;
                 MaxWaterCount.intValue = 3;
-                BoundX.floatValue = 30.0f;
-                BoundZ.floatValue = 30.0f;
+                BoundX.floatValue = 50.0f;
+                BoundZ.floatValue = 50.0f;
 
 
 
@@ -145,8 +145,8 @@ public class SImulationInspectorScript : Editor
                 MinWaterDelay.intValue = 60;
                 MaxWaterDelay.intValue = 120;
                 MaxWaterCount.intValue = 5;
-                BoundX.floatValue = 50.0f;
-                BoundZ.floatValue = 50.0f;
+                BoundX.floatValue = 70.0f;
+                BoundZ.floatValue = 70.0f;
 
                 break;
             case 3: //Large
@@ -160,7 +160,7 @@ public class SImulationInspectorScript : Editor
                 MinFoodDelay.floatValue = 0.5f;
                 MaxFoodDelay.floatValue = 2.0f;
                 MaxFoodCount.intValue = 200;
-                initialWaterCount.intValue = 4;
+                initialWaterCount.intValue = 3;
                 MinWaterDelay.intValue = 60;
                 MaxWaterDelay.intValue = 120;
                 MaxWaterCount.intValue = 6;
@@ -188,6 +188,6 @@ public class SImulationInspectorScript : Editor
         }
 
         serializedObject.ApplyModifiedProperties();
-        
+
     }
 }

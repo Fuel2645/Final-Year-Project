@@ -243,12 +243,48 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: BoundX
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: BoundZ
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MapSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: MaxDelay
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: MinDelay
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MaxFoodCount
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: MaxWaterCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: CarnivourCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: HerbivourCount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: FoodSpawnerCount
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -5915045495367657812, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
+      propertyPath: initialWaterCount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4607138696745332977, guid: d2c7f393f33842c4bb954343b7a82c0f, type: 3}
       propertyPath: m_Name
