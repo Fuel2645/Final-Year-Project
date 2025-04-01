@@ -49,8 +49,15 @@ public class SimulationStarter : MonoBehaviour
         WaterList = new List<GameObject>();
         FoodCheck = new UnityEngine.Vector3(1,1,1);
         Watercheck = new UnityEngine.Vector3(15, 1,15);
+
+
+
+
+
         Invoke("WaterSpawn", 0.1f);
+
         
+
     }
 
 
@@ -79,6 +86,9 @@ public class SimulationStarter : MonoBehaviour
     {
         UnityEngine.Vector3 whereToSpawn = transform.position;
         UnityEngine.Quaternion waterRotation = this.transform.rotation;
+
+        
+
         for (int i = 0; i < HerbivourCount; i++)
         {
             whereToSpawn.x = UnityEngine.Random.Range(-BoundX / 2, (BoundX / 2) + 1);
