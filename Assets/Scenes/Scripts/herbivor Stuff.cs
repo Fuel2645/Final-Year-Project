@@ -22,24 +22,24 @@ public class herbivorStuff : MonoBehaviour
 {
     public AIStates m_State;
 
-    private float FoodCount = 100;
-    private float WaterCount = 100;
-    private float m_Speed;
-    private float BoundX1, BoundX2, BoundZ1, BoundZ2;
-    private float ReductionRate;
+    public float FoodCount = 100;
+    public float WaterCount = 100;
+    public float m_Speed;
+    public float BoundX1, BoundX2, BoundZ1, BoundZ2;
+    public float ReductionRate;
     public bool isMoving = false;
-    private int m_Health;
-    private Vector3 FoodLocaiton, moveDirection;
-    private Vector3 TargetLocation;
-    private Vector3 m_MovementVector;
-    private Vector3 ReachBox;
-    private Vector3 PreviousTargetLocation;
-    private GameObject chasingCarnivore;
+    public int m_Health;
+    public Vector3 FoodLocaiton, moveDirection;
+    public Vector3 TargetLocation;
+    public Vector3 m_MovementVector;
+    public Vector3 ReachBox;
+    public Vector3 PreviousTargetLocation;
+    public GameObject chasingCarnivore;
     public List<GameObject> FoundFood;
     public List<GameObject> FoundWater;
-    private SphereCollider sphereCollider;
-    private GameObject CorpseRef;
-    private CharacterController characterController;
+    public SphereCollider sphereCollider;
+    public GameObject CorpseRef;
+    public CharacterController characterController;
     public float distgancse;
     
 
@@ -57,6 +57,8 @@ public class herbivorStuff : MonoBehaviour
         FoundWater = new List<GameObject>();
         UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
         ReachBox = new Vector3(1.5f, 3.0f, 1.5f);
+
+        initialise(100, 100, 100, 0, GameObject.Find("Corpse"));
     }
 
     // Update is called once per frame
@@ -88,6 +90,9 @@ public class herbivorStuff : MonoBehaviour
         InvokeRepeating("FoodDrain", 1.0f, 0.5f);
         InvokeRepeating("WaterDrain",1.0f,1.0f);
         Invoke("Birthing", NextBirthingTime);
+
+
+       
     }
 
     void StateCheck()
@@ -403,40 +408,40 @@ public class herbivorStuff : MonoBehaviour
     //}
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
-        {
-            FoundFood.Add(other.gameObject);
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == ("Food") && !FoundFood.Contains(other.gameObject))
+    //    {
+    //        FoundFood.Add(other.gameObject);
 
-        }
-        else if (other.gameObject.tag == ("Water") && !FoundWater.Contains(other.gameObject))
-        {
+    //    }
+    //    else if (other.gameObject.tag == ("Water") && !FoundWater.Contains(other.gameObject))
+    //    {
 
-            FoundWater.Add(other.gameObject);
-        }
-        else if (other.gameObject.tag == ("Carnivore") && other is not BoxCollider)
-        {
-            print("Carnivore");
-            m_State = AIStates.Fleeing;
-            PreviousTargetLocation = TargetLocation;
-            TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
-            chasingCarnivore = other.gameObject;
-            isMoving = false;
+    //        FoundWater.Add(other.gameObject);
+    //    }
+    //    else if (other.gameObject.tag == ("Carnivore") && other is not BoxCollider)
+    //    {
+    //        print("Carnivore");
+    //        m_State = AIStates.Fleeing;
+    //        PreviousTargetLocation = TargetLocation;
+    //        TargetLocation += (this.transform.position - other.transform.position).normalized * 10;
+    //        chasingCarnivore = other.gameObject;
+    //        isMoving = false;
             
           
-        }
-        else
-        {
-           // print("dick");
-        }
-    }
+    //    }
+    //    else
+    //    {
+    //       // print("dick");
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == ("Food") && FoundFood.Contains(other.gameObject))
-        {
-            FoundFood.Remove(other.gameObject);
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.tag == ("Food") && FoundFood.Contains(other.gameObject))
+    //    {
+    //        FoundFood.Remove(other.gameObject);
+    //    }
+    //}
 }

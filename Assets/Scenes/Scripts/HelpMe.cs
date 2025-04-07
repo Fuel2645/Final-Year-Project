@@ -13,6 +13,8 @@ public class CameraScript : MonoBehaviour
     public float CameraSpeed;
     public float ScrollSpeed;
 
+
+
     void Start()
     {
         GameObject gameObject = GameObject.Find("MapManager");
