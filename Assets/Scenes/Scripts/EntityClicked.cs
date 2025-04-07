@@ -6,6 +6,6 @@ public class EntityClicked : MonoBehaviour
 {
     public void OnMouseDown()
     {
-        print("You clicked me " + this.gameObject.name);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Fps>().selectedObject = this.gameObject;
     }
 }
