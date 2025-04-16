@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaterScript : MonoBehaviour
 {
-    private float WaterCount = 10000;
+    public float WaterCount = 10000;
 
     public float DrinkingWater()
     {

@@ -58,7 +58,6 @@ public class herbivorStuff : MonoBehaviour
         UnityEngine.Physics.IgnoreCollision(this.GetComponent<SphereCollider>(), this.GetComponent<SphereCollider>(), true);
         ReachBox = new Vector3(1.5f, 3.0f, 1.5f);
 
-        initialise(100, 100, 100, 0, GameObject.Find("Corpse"));
     }
 
     // Update is called once per frame

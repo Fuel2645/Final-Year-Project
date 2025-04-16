@@ -14,15 +14,15 @@ public class CarnivoreScript : MonoBehaviour
 
     private float m_Speed;
     private float HuntChance;
-    private float FoodCount = 100;
-    private float WaterCount = 100;
+    public float FoodCount = 100;
+    public float WaterCount = 100;
     private float DesireToHunt;
     private float ReductionRate = 2.5f;
     private float BoundX1, BoundX2, BoundZ1, BoundZ2;
     private float Distancce;
     private bool isMoving = false;
     private int NeedToHunt;
-    private int m_Health;
+    public int m_Health;
     private Vector3 moveDirection, TargetLocation, m_MovementVector, ReachBox;
     public List<GameObject> FoundWater;
     private GameObject CorspeRef;
@@ -263,37 +263,6 @@ public class CarnivoreScript : MonoBehaviour
                 WaterCount += 40;
                 m_State = AIStates.Idle;
                 break;
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == ("Herbivore") && other is not BoxCollider)
-        {
-            print("Herbivore");
-            if (ChasingEntity == null)
-            {
-                ChasingEntity = other.gameObject;
-            }
-            else if (Vector3.Distance(this.transform.position, other.gameObject.transform.position) < Vector3.Distance(this.transform.position, ChasingEntity.transform.position)) 
-            {
-                ChasingEntity = other.gameObject;
-            }
-        }
-        else if (other.gameObject.tag == ("Corpse") && other.gameObject != ChasingEntity)
-        {
-            print("Corpse");
-            if (ChasingEntity == null)
-            {
-                ChasingEntity = other.gameObject;
-            }
-            else if (Vector3.Distance(this.transform.position, other.gameObject.transform.position) < Vector3.Distance(this.transform.position, ChasingEntity.transform.position))
-            {
-                ChasingEntity = other.gameObject;
-            }
-        }
-        else if(other.gameObject.tag == ("Water") && !FoundWater.Contains(other.gameObject))
-        {
-            FoundWater.Add(other.gameObject);
         }
     }
 
